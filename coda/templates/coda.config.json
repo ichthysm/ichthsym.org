@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0.4",
+  "project_name": "",
+  "pm_domain": "",
+  "build_cmd": "pnpm build",
+  "test_cmd": "pnpm test",
+  "lint_cmd": "pnpm lint",
+  "version_file": "VERSION",
+  "package_files": ["package.json"],
+  "i18n_files": [],
+  "branch_prefix": "night/",
+  "allowed_paths": [],
+  "night_max_turns": 30,
+  "night_extra_tools": [],
+  "night_on_fail": "continue",
+  "layer2_checks": {
+    "orphan_files": {
+      "enabled": true,
+      "extensions": [".ts", ".tsx", ".css", ".scss"],
+      "ignore_patterns": ["*.test.*", "*.spec.*", "*.d.ts", "migrations/*"]
+    },
+    "env_consistency": {
+      "enabled": true,
+      "env_example": ".env.example",
+      "source_dirs": ["apps/backend/src", "apps/frontend/src"]
+    },
+    "lockfile_sync": {
+      "enabled": true
+    }
+  }
+}

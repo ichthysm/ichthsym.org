@@ -1,0 +1,30 @@
+{
+  "project_name": "coda",
+  "pm_domain": "",
+  "build_cmd": "pnpm build",
+  "test_cmd": "pnpm test",
+  "lint_cmd": "pnpm lint",
+  "version_file": "VERSION",
+  "package_files": ["package.json"],
+  "i18n_files": [],
+  "branch_prefix": "night/",
+  "layer2_checks": {
+    "orphan_files": {
+      "enabled": true,
+      "extensions": [".ts", ".tsx", ".js", ".jsx", ".css", ".scss"],
+      "ignore_patterns": ["node_modules/", "dist/", "build/", ".next/", "coverage/"]
+    },
+    "env_consistency": {
+      "enabled": true,
+      "search_dirs": ["src/", "apps/"],
+      "env_files": [".env.example"],
+      "ignore_vars": ["NODE_ENV", "PORT"]
+    },
+    "lockfile_sync": {
+      "enabled": true,
+      "lockfile": "pnpm-lock.yaml",
+      "package_manager": "pnpm"
+    }
+  },
+  "mcp_servers": {}
+}

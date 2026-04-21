@@ -1,0 +1,37 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+이 파일은 이 저장소에서 코드 작업을 할 때 Claude Code (claude.ai/code)에게 가이드를 제공합니다.
+
+## 프로젝트 개요
+
+- **프로젝트명**: {{PROJECT_NAME}}
+- **현재 버전**: VERSION 파일 참조
+
+## 개발 환경 실행
+
+```bash
+# 의존성 설치
+pnpm install
+
+# 개발 서버
+pnpm dev
+```
+
+## 테스트 및 빌드
+
+```bash
+{{BUILD_CMD}}    # 빌드
+{{TEST_CMD}}     # 테스트
+{{LINT_CMD}}     # 린트
+```
+
+## 참고
+
+- **프로젝트 상태**: [PROJECT_STATUS.md](PROJECT_STATUS.md)
+- **현재 버전**: [VERSION](VERSION)
+
+---
+
+> 이 파일은 CODA에 의해 생성되었습니다. `/초기화` 스킬로 코드베이스 분석 후 보강하세요.

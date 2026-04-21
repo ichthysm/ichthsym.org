@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ICHTHYS SOLACE — Community</title>
+  <meta name="description" content="ICHTHYS SOLACE 커뮤니티 — 선교지 소식, 온라인 기도, 후원 안내." />
+  <meta property="og:title" content="ICHTHYS SOLACE — Community" />
+  <meta property="og:description" content="작은 헌신의 밀알은 생명을 살리는 하나님의 방식을 만듭니다." />
+  <meta property="og:image" content="img/logo.png" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/png" href="img/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header>
+  <div class="top-bar">
+    <!-- <a href="#">로그인</a><span class="sep">|</span><a href="#">회원가입</a> -->
+  </div>
+  <nav class="main-nav">
+    <a href="index.html" class="nav-logo"><img src="img/logo.png" alt="ICHTHYS SOLACE" /></a>
+    <div class="nav-links">
+      <a href="index.html"      class="nav-link">HOME</a>
+      <a href="about.html"      class="nav-link">ABOUT</a>
+      <a href="ministry.html"   class="nav-link">MINISTRY</a>
+      <a href="community.html"  class="nav-link active">COMMUNITY</a>
+    </div>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero-section community">
+  <div class="hero-bg" style="background-image: url('img/contract 이미지.jpg'); background-position: center top;"></div>
+  <div class="hero-overlay"></div>
+  <div class="community-content">
+    <div class="community-left">
+      <h2 class="obing-title">오병이어</h2>
+    </div>
+    <div class="community-right">
+      <div class="section-badge">ICHTHYS CONTACT</div>
+      <p class="section-sub">작은 헌신의 밀알은 생명을 살리는<br>하나님의 방식을 만듭니다.</p>
+    </div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" data-target="news">선교지 소식</button>
+    <button class="tab-btn" data-target="prayer">온라인 기도</button>
+    <button class="tab-btn" data-target="support">후원 안내</button>
+  </div>
+</section>
+
+<!-- 탭 콘텐츠 -->
+<div class="tab-panels">
+  <div class="tab-panel active" id="news">
+    <div class="panel-inner">
+      <div id="news-list" class="board-grid">
+        <p class="board-loading">소식을 불러오는 중...</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="prayer">
+    <div class="panel-inner">
+      <div id="prayer-list" class="prayer-list">
+        <p class="board-loading">기도 제목을 불러오는 중...</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="support">
+    <div class="panel-inner">
+      <div class="panel-grid">
+        <div class="panel-txt">
+          <h3>후원 안내</h3>
+          <p>ICHTHYS SOLACE의 사역을 후원해주세요. 여러분의 작은 헌신이 상처 입은 선교사와 북한 고아, 이주민들에게 큰 위로가 됩니다.</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras accumsan iaculis felis, eu pretium nulla laoreet eget. Phasellus ac sem vel ligula dignissim eleifend.</p>
+          <p style="margin-top:24px; line-height:2.4; color:#333;">
+            계좌: 국민은행 000-0000-0000-00<br>
+            예금주: ICHTHYS SOLACE<br>
+            TEL: 010-7776-2042
+          </p>
+        </div>
+        <div class="panel-img">
+          <img src="https://picsum.photos/seed/support/800/600" alt="후원 안내" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo"><img src="img/logo.png" alt="ICHTHYS SOLACE" /></div>
+  <div class="footer-name">ICHTHYS SOLACE</div>
+  <div class="footer-tagline">Healing Today · Sending Tomorrow</div>
+  <div class="footer-rule"></div>
+  <div class="footer-info">
+    서울시 서초구 신반포로 194 &nbsp;·&nbsp; 대표자: 양건호 &nbsp;·&nbsp; TEL: 010-7776-2042
+  </div>
+</footer>
+
+<script src="tab.js"></script>
+<script type="module" src="js/community.js"></script>
+</body>
+</html>

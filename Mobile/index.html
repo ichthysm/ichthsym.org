@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ICHTHYS SOLACE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+      line-height: 1.7;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    /* ── 섹션 구분선 ── */
+    .page-sep {
+      border: none;
+      border-top: 6px solid #f4f2ef;
+      margin: 0;
+    }
+
+    /* ── 섹션 헤더 (ABOUT / MINISTRY) ── */
+    .page-header {
+      text-align: center;
+      padding: 28px 24px 0;
+    }
+
+    .page-header h2 {
+      font-family: 'Noto Serif KR', serif;
+      font-size: calc(1rem + 1.5vw);
+      font-weight: 400;
+      letter-spacing: 7px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .header-rule {
+      width: 36px;
+      height: 1px;
+      background: #aaa;
+      margin: 0 auto 20px;
+    }
+
+    /* ── 콘텐츠 행 (2열 그리드) ── */
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      padding: 0 18px 20px;
+      align-items: start;
+    }
+
+    .row + .row {
+      padding-top: 0;
+    }
+
+    /* ── 이미지 ── */
+    .pic img {
+      width: 100%;
+      max-width: 100%;
+      border-radius: 7px;
+      object-fit: cover;
+      display: block;
+    }
+    .pic.tall img   { aspect-ratio: 1/1; }
+    .pic.sq img     { aspect-ratio: 1/1; }
+    .pic.land img   { aspect-ratio: 4/3; }
+
+    /* ── 텍스트 블록 ── */
+    .txt {
+      background: #f6f4f0;
+      border-radius: 8px;
+      padding: 14px 12px;
+    }
+
+    .txt h3 {
+      font-family: 'Noto Serif KR', serif;
+      font-size: calc(0.9rem + 1.2vw);
+      font-weight: 700;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .txt p {
+      font-size: calc(0.65rem + 0.5vw);
+      color: #555;
+      line-height: 1.7;
+      margin-bottom: 5px;
+    }
+
+    .txt .sig {
+      font-size: 11px;
+      color: #aaa;
+      margin-top: 12px;
+    }
+
+    .txt .vision-ko {
+      font-family: 'Noto Serif KR', serif;
+      font-size: calc(0.7rem + 0.8vw);
+      font-weight: 600;
+      color: #4a5240;
+      line-height: 1.7;
+      margin-bottom: 4px;
+    }
+
+    .txt .vision-en {
+      font-size: 10px;
+      color: #aaa;
+      letter-spacing: 0.3px;
+      margin-bottom: 12px;
+    }
+
+    /* ── 미니스트리 아이템 ── */
+    .min-item {
+      padding: 0 18px 18px;
+    }
+
+    .min-grid > div:not(.pic) {
+      background: #f6f4f0;
+      border-radius: 8px;
+      padding: 14px 12px;
+    }
+
+    .min-item h3 {
+      font-family: 'Noto Serif KR', serif;
+      font-size: calc(1rem + 1.5vw);
+      font-weight: 700;
+      margin-bottom: 14px;
+      line-height: 1.4;
+    }
+
+    .min-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .min-sub {
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+
+    ul.list {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul.list li {
+      font-size: calc(0.65rem + 0.5vw);
+      color: #555;
+      padding: 3px 0 3px 14px;
+      position: relative;
+      line-height: 1.7;
+    }
+
+    ul.list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 12px;
+      width: 6px;
+      height: 1px;
+      background: #4a5240;
+    }
+
+    /* ── 페이지 배너 (각 섹션 하단) ── */
+    .page-banner {
+      border-top: 1px solid #ebe8e3;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #faf9f7;
+    }
+
+    .page-banner img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .page-banner > div {
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .banner-name {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: #555;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .banner-tagline {
+      font-size: 9px;
+      color: #bbb;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ── 최종 푸터 ── */
+    footer {
+      background: #faf9f7;
+      text-align: center;
+      padding: 36px 20px 48px;
+      border-top: 1px solid #ebe8e3;
+    }
+
+    .footer-logo img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      margin-bottom: 8px;
+    }
+
+    .footer-name {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      margin-bottom: 3px;
+    }
+
+    .footer-tagline {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 20px;
+    }
+
+    .footer-rule {
+      width: 28px;
+      height: 1px;
+      background: #ddd;
+      margin: 0 auto 20px;
+    }
+
+    .footer-info {
+      font-size: 11px;
+      color: #999;
+      line-height: 2.1;
+    }
+
+    /* ── 독립 소제목 ── */
+    .sub-heading {
+      font-family: 'Noto Serif KR', serif;
+      font-size: calc(1.2rem + 2vw);
+      font-weight: 700;
+      padding: 20px 18px 8px;
+      color: #1a1a1a;
+      line-height: 1.3;
+    }
+    .sub-heading.right  { text-align: right; }
+    .sub-heading.center { text-align: center; }
+
+    @media (max-width: 320px) {
+      .row, .min-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════ ABOUT ════════ -->
+<div class="page-header">
+  <h2>About</h2>
+  <div class="header-rule"></div>
+</div>
+
+<!-- 환영의 글 -->
+<h3 class="sub-heading">환영의 글</h3>
+<div class="row">
+  <div class="txt">
+    <p>하나님 나라를 위해 헌신하여 긴 고난과 고통을 치유하며 사역했던 선교사들을 떠올립니다. 하나님을 향한 마음과 열정들을 볼 때마다 함께 돕고자 합니다.</p>
+    <p>하나님께서 치유와 회복, 그리고 재파송의 은혜가 ICHTHYS SOLACE를 통해 넘치기를 소망합니다.</p>
+    <p class="sig">ICHTHYS SOLACE 대표 양건호</p>
+  </div>
+  <div class="pic tall">
+    <img src="img/IMG_20260224_110815.jpg" alt="환영의 글" />
+  </div>
+</div>
+
+<!-- 소개 -->
+<h3 class="sub-heading right">소개</h3>
+<div class="row">
+  <div class="pic sq">
+    <img src="img/4399961735_8d16c50468_b.jpg" alt="소개" />
+  </div>
+  <div class="txt">
+    <p>ICHTHYS SOLACE는 하나님의 사랑이 필요한 이웃의 임시 쉼터로, 고통 가운데 나아가도록 돕는 예수님의 선한 공동체입니다.</p>
+    <p>ICHTHYS(물고기)는 예수님을, SOLACE(위로)는 고통 가운데서도 하나님의 뜻을 이루는 사명을 담고 있습니다.</p>
+    <p>우리는 이들이 복음을 만나 새 삶을 살아가도록 함께합니다.</p>
+  </div>
+</div>
+
+<!-- 비전 -->
+<h3 class="sub-heading">비전</h3>
+<div class="row">
+  <div class="txt">
+    <p class="vision-ko">쉼에서 재파송으로,<br>치유에서 사명으로!</p>
+    <p class="vision-en">From Rest to Recommission,<br>From Healing to Mission</p>
+    <p>소명을 잃은 사역자들이 온전히 회복되도록</p>
+    <p>복된의 고리, 그들이 만나 변화를 경험하도록</p>
+    <p>Healing Today, Sending Tomorrow</p>
+  </div>
+  <div class="pic sq">
+    <img src="img/vision.jpg" alt="비전" />
+  </div>
+</div>
+
+<!-- ABOUT 배너 -->
+<div class="page-banner">
+  <img src="img/logo.png" alt="logo" />
+  <div>
+    <div class="banner-name">ICHTHYS SOLACE</div>
+    <div class="banner-tagline">HEALING TODAY · SENDING TOMORROW</div>
+  </div>
+</div>
+
+<hr class="page-sep" />
+
+<!-- ════════ MINISTRY ════════ -->
+<div class="page-header">
+  <h2>Ministry</h2>
+  <div class="header-rule"></div>
+</div>
+
+<!-- 선교사 회복 프로그램 -->
+<h3 class="sub-heading">선교사 회복 프로그램</h3>
+<div class="min-item">
+  <div class="min-grid">
+    <div>
+      <p class="min-sub">ICHTHYS Gathering – 정기 기도 집회</p>
+      <ul class="list">
+        <li>5박6일간의 선교사 Re-Breath 프로그램</li>
+        <li>한식과 나눔, 도움의 연결</li>
+        <li>가족 여행 지원</li>
+        <li>Healing Table – 아름다운 식탁 교제</li>
+      </ul>
+    </div>
+    <div class="pic sq">
+      <img src="img/contract 이미지.jpg" alt="선교사 회복 프로그램" />
+    </div>
+  </div>
+</div>
+
+<!-- 북한 고아 사역 -->
+<h3 class="sub-heading right">북한 고아 사역</h3>
+<div class="min-item">
+  <div class="min-grid">
+    <div class="pic sq">
+      <img src="img/22990_45430_335.jpg" alt="북한 고아 사역" />
+    </div>
+    <div>
+      <ul class="list">
+        <li>북한 고아들을 위한 금융 사역</li>
+        <li>방문상 설립과 문화 지원</li>
+        <li>북한 지하 교회 신앙 지원</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 국내 외국인 사역 -->
+<h3 class="sub-heading">국내 외국인 사역</h3>
+<div class="min-item">
+  <div class="min-grid">
+    <div>
+      <ul class="list">
+        <li>한국 교회를 통한 커뮤니티 활동</li>
+        <li>이주민들을 위한 신앙 공동체 형성</li>
+        <li>외국인 노동자들을 위한 정착 지원</li>
+        <li>한국어 교실</li>
+        <li>선교 훈련 후 교회를 위한 선교사 파송</li>
+      </ul>
+    </div>
+    <div class="pic sq">
+      <img src="img/20241024501457.jpg" alt="국내 외국인 사역" />
+    </div>
+  </div>
+</div>
+
+<!-- MINISTRY 배너 -->
+<div class="page-banner">
+  <img src="img/logo.png" alt="logo" />
+  <div>
+    <div class="banner-name">ICHTHYS SOLACE</div>
+    <div class="banner-tagline">HEALING TODAY · SENDING TOMORROW</div>
+  </div>
+</div>
+
+<!-- ════════ FOOTER ════════ -->
+<footer>
+  <div class="footer-logo">
+    <img src="img/logo.png" alt="ICHTHYS SOLACE" />
+  </div>
+  <div class="footer-name">ICHTHYS SOLACE</div>
+  <div class="footer-tagline">Healing Today, Sending Tomorrow</div>
+  <div class="footer-rule"></div>
+  <div class="footer-info">
+    서울시 서초구 신반포로 194<br>
+    대표자: 양건호<br>
+    TEL: 010-7776-2042
+  </div>
+</footer>
+
+</body>
+</html>

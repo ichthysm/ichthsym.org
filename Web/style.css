@@ -1,0 +1,461 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: #fff;
+  color: #1a1a1a;
+  overflow-x: hidden;
+}
+
+/* ── HEADER (top-bar 26 + nav 56 = 82px) ── */
+header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+}
+.top-bar {
+  height: 30px;
+  background: #6b7c4a;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 40px;
+  gap: 10px;
+  font-size: 12px;
+}
+.top-bar a { color: rgba(255,255,255,0.85); text-decoration: none; letter-spacing: 0.3px; }
+.top-bar a:hover { color: #fff; }
+.top-bar .sep { color: rgba(255,255,255,0.4); }
+
+.main-nav {
+  height: 90px;
+  background: #fff;
+  border-bottom: 1px solid #e8e8e8;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+}
+.nav-logo img { width: 80px; height: 80px; object-fit: contain; }
+.nav-links { display: flex; align-items: center; gap: 44px; margin-left: auto; }
+.nav-link {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+  color: #333;
+  text-decoration: none;
+  text-transform: uppercase;
+  padding-bottom: 3px;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+.nav-link:hover,
+.nav-link.active { color: #4a5240; border-bottom-color: #6b7c4a; }
+
+/* ── HERO ── */
+.hero-section {
+  position: relative;
+  height: 72vh;
+  min-height: 480px;
+  display: flex;
+  align-items: center;
+}
+.hero-section.home {
+  height: 100vh;
+  min-height: 640px;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+.hero-overlay { position: absolute; inset: 0; }
+
+.hero-section.home     .hero-overlay { background: none; }
+.hero-section.about    .hero-overlay { background: linear-gradient(to right, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.32) 100%); }
+.hero-section.ministry .hero-overlay { background: linear-gradient(to left,  rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.28) 100%); }
+.hero-section.community .hero-overlay { background: rgba(0,0,0,0.62); }
+
+/* ── HOME 히어로 이미지 (비율 그대로) ── */
+.home-hero-img {
+  margin-top: 120px; /* fixed header 높이 (30 + 90) */
+  width: 100%;
+  line-height: 0;
+}
+.home-hero-img img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ── HOME 콘텐츠 ── */
+.home-content {
+  position: relative; z-index: 2;
+  width: 90vw; max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 82px;
+}
+.ichthys-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(56px, 8vw, 120px);
+  font-weight: 400; letter-spacing: 14px; color: #fff;
+  display: block; line-height: 1;
+}
+.solace-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(36px, 5.2vw, 80px);
+  font-weight: 400; color: #a8bb8a;
+  display: block;
+  margin-left: clamp(28px, 4.5vw, 72px);
+  margin-top: -4px; line-height: 1;
+}
+.home-quote {
+  position: absolute; right: 5vw; bottom: 80px;
+  text-align: right; z-index: 2;
+}
+.home-quote p {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-size: 15px;
+  color: rgba(255,255,255,0.68); line-height: 1.7;
+}
+.home-quote .ref {
+  font-size: 11px; letter-spacing: 1.5px;
+  color: rgba(255,255,255,0.38); font-style: normal; margin-top: 4px;
+}
+
+/* ── ABOUT 콘텐츠 ── */
+.about-content {
+  position: relative; z-index: 2;
+  width: 90vw; max-width: 1200px;
+  margin: 0 auto; padding-top: 82px;
+}
+
+/* ── MINISTRY 콘텐츠 (우측) ── */
+.ministry-content {
+  position: relative; z-index: 2;
+  width: 90vw; max-width: 1200px;
+  margin: 0 auto; padding-top: 82px;
+  display: flex; flex-direction: column;
+  align-items: flex-end; text-align: right;
+}
+
+/* ── COMMUNITY 콘텐츠 (좌우 분리) ── */
+.community-content {
+  position: relative; z-index: 2;
+  width: 90vw; max-width: 1200px;
+  margin: 0 auto; padding-top: 82px;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 40px;
+}
+.community-left .obing-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(48px, 6.5vw, 96px);
+  font-weight: 700; color: #fff; line-height: 1.1;
+}
+.community-right { text-align: right; flex-shrink: 0; max-width: 400px; }
+
+/* ── 공통 배지/헤드라인 ── */
+.section-badge {
+  display: inline-block;
+  background: #6b7c4a; color: #fff;
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 2.5px; padding: 4px 16px;
+  border-radius: 20px; margin-bottom: 22px;
+  text-transform: uppercase;
+}
+.section-headline {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(20px, 2.5vw, 40px);
+  font-weight: 700; color: #fff;
+  line-height: 1.6; max-width: 620px; margin-bottom: 18px;
+}
+.section-sub {
+  font-size: clamp(13px, 1.1vw, 15px);
+  color: rgba(255,255,255,0.60); line-height: 1.85; max-width: 460px;
+}
+
+/* ── TAB BAR ── */
+.tab-bar {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  z-index: 3; display: flex;
+  background: rgba(12,14,10,0.82);
+  backdrop-filter: blur(6px);
+  border-top: 1px solid rgba(255,255,255,0.07);
+}
+.tab-btn {
+  flex: 1; padding: 20px 12px;
+  background: transparent; border: none;
+  border-top: 2px solid transparent;
+  color: rgba(255,255,255,0.42);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: clamp(13px, 1vw, 15px);
+  cursor: pointer; text-align: center;
+  transition: all 0.2s; letter-spacing: 0.3px;
+}
+.tab-btn:hover { color: rgba(255,255,255,0.78); background: rgba(255,255,255,0.04); }
+.tab-btn.active { color: #fff; border-top-color: #8fa06a; background: rgba(143,160,106,0.10); }
+
+/* ── TAB PANELS ── */
+.tab-panels { background: #faf9f6; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+.panel-inner {
+  width: 90vw; max-width: 1200px;
+  margin: 0 auto; padding: 56px 0 80px;
+}
+.panel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+.panel-grid.flip { direction: rtl; }
+.panel-grid.flip > * { direction: ltr; }
+
+.panel-img img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 4px; }
+
+.panel-txt h3 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(20px, 1.8vw, 28px);
+  font-weight: 700; color: #1a1a1a;
+  margin-bottom: 22px; line-height: 1.4;
+}
+.panel-txt p { font-size: clamp(14px, 1.05vw, 16px); color: #555; line-height: 1.95; margin-bottom: 12px; }
+.panel-txt .sig { font-size: 13px; color: #bbb; margin-top: 24px; }
+
+.vision-ko {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(20px, 1.7vw, 26px);
+  font-weight: 600; color: #4a5240; line-height: 1.7; margin-bottom: 8px;
+}
+.vision-en { font-size: 13px; color: #bbb; font-style: italic; margin-bottom: 24px; }
+.sub-label { font-size: 11px; letter-spacing: 2px; color: #8fa06a; text-transform: uppercase; margin-bottom: 14px; }
+
+ul.mlist { list-style: none; padding: 0; }
+ul.mlist li {
+  font-size: clamp(14px, 1.05vw, 16px); color: #555;
+  padding: 12px 0 12px 22px; position: relative;
+  border-bottom: 1px solid #edeae4; line-height: 1.6;
+}
+ul.mlist li:first-child { border-top: 1px solid #edeae4; }
+ul.mlist li::before {
+  content: ''; position: absolute;
+  left: 0; top: 50%; transform: translateY(-50%);
+  width: 8px; height: 1px; background: #8fa06a;
+}
+
+/* ── 게시판 공통 ── */
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 36px;
+}
+.board-card {
+  background: #fff;
+  border: 1px solid #edeae4;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.board-card-img {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+}
+.board-card-body {
+  padding: 24px 28px 28px;
+}
+.board-card-body h3 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 18px; font-weight: 700;
+  color: #1a1a1a; margin-bottom: 10px; line-height: 1.4;
+}
+.board-card-body p { font-size: 14px; color: #666; line-height: 1.85; }
+.board-date { font-size: 11px; letter-spacing: 1px; color: #bbb; margin-bottom: 10px; }
+
+.prayer-list { display: flex; flex-direction: column; gap: 0; }
+.prayer-item {
+  padding: 28px 0;
+  border-bottom: 1px solid #edeae4;
+}
+.prayer-item:first-child { border-top: 1px solid #edeae4; }
+.prayer-item-header {
+  display: flex; align-items: baseline;
+  justify-content: space-between; gap: 20px;
+  margin-bottom: 10px;
+}
+.prayer-item-header h3 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 17px; font-weight: 700; color: #1a1a1a;
+}
+.prayer-item p { font-size: 14px; color: #666; line-height: 1.85; }
+
+.board-loading, .board-empty {
+  font-size: 14px; color: #bbb;
+  text-align: center; padding: 60px 0;
+  grid-column: 1 / -1;
+}
+
+/* ── HOME 사역 카드 ── */
+.home-ministry {
+  background: #faf9f6;
+  padding: 80px 0 90px;
+}
+.home-ministry-inner {
+  width: 90vw; max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+.hm-label {
+  font-size: 11px; letter-spacing: 3px;
+  color: #8fa06a; text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.hm-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 28px; font-weight: 700;
+  color: #1a1a1a; margin-bottom: 56px;
+}
+.hm-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+.hm-card {
+  background: #fff;
+  border: 1px solid #edeae4;
+  border-radius: 4px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.hm-card:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+  transform: translateY(-3px);
+}
+.hm-card-img {
+  height: 220px;
+  background-size: cover;
+  background-position: center;
+}
+.hm-card-body {
+  padding: 28px 28px 32px;
+  text-align: left;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.hm-card-badge {
+  display: inline-block;
+  background: #f0f4e8;
+  color: #4a5240;
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 1.5px; padding: 3px 12px;
+  border-radius: 20px; margin-bottom: 14px;
+  text-transform: uppercase;
+}
+.hm-card-body h3 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 18px; font-weight: 700;
+  color: #1a1a1a; margin-bottom: 12px;
+  line-height: 1.4;
+}
+.hm-card-body p {
+  font-size: 14px; color: #666;
+  line-height: 1.85; flex: 1;
+}
+.hm-card-more {
+  display: inline-block;
+  margin-top: 20px;
+  font-size: 12px; letter-spacing: 0.5px;
+  color: #6b7c4a; font-weight: 500;
+}
+
+/* ── HOME 비전 배너 ── */
+.home-vision-banner {
+  background: #4a5240;
+  padding: 90px 0;
+  text-align: center;
+}
+.hvb-inner {
+  width: 90vw; max-width: 900px;
+  margin: 0 auto;
+}
+.hvb-en {
+  font-size: 10px; letter-spacing: 3.5px;
+  color: rgba(255,255,255,0.38);
+  text-transform: uppercase; margin-bottom: 28px;
+}
+.hvb-ko {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(28px, 3.2vw, 48px);
+  font-weight: 700; color: #fff;
+  line-height: 1.5; margin-bottom: 40px;
+}
+.hvb-btn {
+  display: inline-block;
+  border: 1px solid rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.80);
+  text-decoration: none;
+  font-size: 12px; letter-spacing: 2px;
+  padding: 13px 36px;
+  transition: background 0.2s, color 0.2s;
+}
+.hvb-btn:hover {
+  background: rgba(255,255,255,0.10);
+  color: #fff;
+}
+
+/* ── HOME 함께하기 ── */
+.home-join {
+  background: #fff;
+  padding: 80px 0 90px;
+  border-top: 1px solid #edeae4;
+}
+.home-join-inner {
+  width: 90vw; max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.hj-item {
+  flex: 1;
+  text-align: center;
+  padding: 0 40px;
+}
+.hj-icon {
+  font-size: 18px; color: #8fa06a;
+  margin-bottom: 20px;
+}
+.hj-item h3 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 20px; font-weight: 700;
+  color: #1a1a1a; margin-bottom: 12px;
+}
+.hj-item p {
+  font-size: 14px; color: #777;
+  line-height: 1.8; margin-bottom: 22px;
+}
+.hj-link {
+  font-size: 12px; letter-spacing: 0.5px;
+  color: #6b7c4a; text-decoration: none;
+  border-bottom: 1px solid #8fa06a;
+  padding-bottom: 2px;
+}
+.hj-link:hover { color: #4a5240; }
+.hj-divider {
+  width: 1px; height: 100px;
+  background: #edeae4; flex-shrink: 0;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: #0e0f0c; text-align: center;
+  padding: 72px 20px 64px; border-top: 1px solid #1a1a14;
+}
+.footer-logo img { width: 160px; height: 160px; object-fit: contain; margin-bottom: 20px; }
+.footer-name { font-family: 'Playfair Display', serif; font-size: 15px; letter-spacing: 7px; color: rgba(255,255,255,0.65); margin-bottom: 6px; }
+.footer-tagline { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 36px; }
+.footer-rule { width: 28px; height: 1px; background: #222; margin: 0 auto 28px; }
+.footer-info { font-size: 13px; color: rgba(255,255,255,0.28); line-height: 2.3; }
