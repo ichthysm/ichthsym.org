@@ -22,7 +22,7 @@ async function loadNews() {
     return
   }
 
-  container.innerHTML = data.map(post => `
+  container.innerHTML = data.map((post, i) => `
     <div class="board-card">
       ${post.image_url
         ? `<div class="board-card-img" style="background-image:url('${post.image_url}')"></div>`
@@ -30,10 +30,19 @@ async function loadNews() {
       <div class="board-card-body">
         <p class="board-date">${formatDate(post.created_at)}</p>
         <h3>${post.title}</h3>
-        <p>${post.content}</p>
+        <p class="board-card-content" data-id="${i}">${post.content}</p>
+        <button class="board-more-btn" data-target="${i}">더보기 ▾</button>
       </div>
     </div>
   `).join('')
+
+  container.querySelectorAll('.board-more-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const content = container.querySelector(`.board-card-content[data-id="${btn.dataset.target}"]`)
+      content.classList.toggle('expanded')
+      btn.textContent = content.classList.contains('expanded') ? '접기 ▴' : '더보기 ▾'
+    })
+  })
 }
 
 async function loadPrayer() {
