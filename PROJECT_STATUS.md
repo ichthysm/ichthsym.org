@@ -24,7 +24,7 @@
 - `Web/style.css` — HOME 신규 섹션 CSS 추가 (`.home-ministry`, `.home-vision-banner`, `.home-join`)
 - `Web/style.css` — 게시판 CSS 추가 (`.board-grid`, `.board-card`, `.prayer-list`, `.prayer-item`)
 - `Web/tab.js` — 탭 스크립트 공통 파일로 분리 (about/ministry/community 인라인 제거)
-- `Web/js/community.js` — Supabase 연동 게시판 (선교지 소식, 온라인 기도)
+- `Web/js/community.js` — Supabase 연동 게시판 (선교지 소식, 정기 기도 모임)
 - 4개 페이지 META 태그 + favicon 적용
 - 로그인/회원가입 링크 주석 처리
 - 탭 패널 Lorem Ipsum + picsum.photos 더미 이미지 적용
