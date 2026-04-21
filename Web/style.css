@@ -219,12 +219,11 @@ header {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
-  margin-bottom: 52px;
 }
 .recovery-photos img {
   width: 100%;
-  aspect-ratio: 16/9;
-  object-fit: cover;
+  height: auto;
+  display: block;
   border-radius: 4px;
 }
 
