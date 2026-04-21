@@ -215,6 +215,19 @@ header {
 .panel-img-stack { display: flex; flex-direction: column; gap: 14px; }
 .panel-img-stack img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 4px; }
 
+.recovery-photos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 52px;
+}
+.recovery-photos img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
 .panel-section-img { margin-bottom: 40px; }
 .panel-section-img img { width: 100%; max-height: 320px; object-fit: cover; border-radius: 4px; }
 
