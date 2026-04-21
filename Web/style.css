@@ -211,6 +211,11 @@ header {
 .panel-grid.flip > * { direction: ltr; }
 
 .panel-img img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 4px; }
+.panel-img-stack { display: flex; flex-direction: column; gap: 14px; }
+.panel-img-stack img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 4px; }
+
+.panel-section-img { margin-bottom: 40px; }
+.panel-section-img img { width: 100%; max-height: 320px; object-fit: cover; border-radius: 4px; }
 
 .panel-txt h3 {
   font-family: 'Noto Serif KR', serif;
