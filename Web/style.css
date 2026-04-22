@@ -212,6 +212,9 @@ header {
 .panel-grid.flip > * { direction: ltr; }
 
 .panel-img img { width: 100%; height: auto; display: block; border-radius: 4px; }
+
+.panel-img-crop { position: relative; overflow: hidden; min-height: 200px; align-self: stretch; }
+.panel-img-crop img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: bottom; }
 .panel-img-stack { display: flex; flex-direction: column; gap: 14px; }
 .panel-img-stack img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 4px; }
 
@@ -590,6 +593,10 @@ footer {
 
   /* ── 선교사 회복 사진 ── */
   .recovery-photos { grid-template-columns: 1fr; gap: 16px; }
+
+  /* ── 환영 이미지 크롭 해제 ── */
+  .panel-img-crop { position: static; overflow: visible; min-height: 0; align-self: auto; }
+  .panel-img-crop img { position: static; width: 100%; height: auto; object-fit: initial; }
 
   /* ── FOOTER ── */
   .footer-logo img { width: 100px; height: 100px; }
