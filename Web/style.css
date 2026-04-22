@@ -539,10 +539,7 @@ footer {
   transform-origin: center;
 }
 @media (prefers-color-scheme: dark) {
-  .nav-hamburger span { background: #ccc; }
-  .main-nav { background: #1a1a1a; border-bottom-color: #333; }
-  .nav-links { background: #1a1a1a; border-bottom-color: #333; }
-  .nav-link { color: #ccc; }
+  .nav-hamburger span { background: #555; }
 }
 .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .nav-hamburger.open span:nth-child(2) { opacity: 0; }
