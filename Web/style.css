@@ -499,3 +499,99 @@ footer {
 .footer-tagline { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 36px; }
 .footer-rule { width: 28px; height: 1px; background: #222; margin: 0 auto 28px; }
 .footer-info { font-size: 13px; color: rgba(255,255,255,0.28); line-height: 2.3; }
+
+/* ════════════════════════════════
+   RESPONSIVE  (≤ 768px)
+   ════════════════════════════════ */
+
+/* ── 햄버거 버튼 ── */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px; height: 36px;
+  background: none; border: none;
+  cursor: pointer; margin-left: auto; padding: 4px;
+}
+.nav-hamburger span {
+  display: block; width: 22px; height: 2px;
+  background: #333; border-radius: 2px;
+  transition: transform 0.25s, opacity 0.25s;
+  transform-origin: center;
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 768px) {
+
+  /* ── NAV ── */
+  .nav-hamburger { display: flex; }
+  .main-nav { padding: 0 20px; height: 64px; }
+  .nav-logo img { width: 52px; height: 52px; }
+  .nav-links {
+    display: none;
+    position: fixed;
+    top: 64px; left: 0; right: 0;
+    background: #fff;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 28px 28px;
+    gap: 0;
+    border-bottom: 1px solid #e8e8e8;
+    z-index: 199;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+  .nav-links.open { display: flex; }
+  .nav-link { padding: 14px 0; font-size: 13px; letter-spacing: 2px; width: 100%; border-bottom: none; }
+  .top-bar { display: none; }
+
+  /* ── HERO ── */
+  .hero-section { height: auto; min-height: 320px; padding-top: 64px; }
+  .about-content,
+  .ministry-content,
+  .community-content { padding-top: 48px; padding-bottom: 80px; width: 92vw; }
+  .section-headline { font-size: clamp(16px, 5vw, 28px); max-width: 100%; }
+  .section-sub { font-size: 13px; }
+
+  /* community 히어로 좌우 → 상하 */
+  .community-content { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .community-left .obing-title { font-size: clamp(36px, 10vw, 64px); }
+  .community-right { text-align: left; max-width: 100%; }
+
+  /* ── TAB BAR ── */
+  .tab-bar { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .tab-btn { flex: 0 0 auto; padding: 16px 18px; font-size: 13px; white-space: nowrap; }
+
+  /* ── PANEL ── */
+  .panel-inner { padding: 40px 0 60px; width: 92vw; }
+  .panel-grid,
+  .panel-grid.flip { grid-template-columns: 1fr; gap: 36px; direction: ltr; }
+  .panel-grid.flip > * { direction: ltr; }
+
+  /* ── HOME 히어로 ── */
+  .home-hero-img { margin-top: 64px; }
+
+  /* ── HOME 사역 카드 ── */
+  .hm-cards { grid-template-columns: 1fr; gap: 24px; }
+  .hm-title { font-size: 22px; margin-bottom: 36px; }
+
+  /* ── HOME 비전 배너 ── */
+  .hvb-ko { font-size: clamp(22px, 6vw, 36px); }
+
+  /* ── HOME 함께하기 ── */
+  .home-join-inner { flex-direction: column; align-items: center; gap: 0; }
+  .hj-item { padding: 40px 20px; width: 100%; }
+  .hj-divider { width: 60px; height: 1px; }
+
+  /* ── 게시판 ── */
+  .board-grid { grid-template-columns: 1fr; gap: 24px; }
+
+  /* ── 선교사 회복 사진 ── */
+  .recovery-photos { grid-template-columns: 1fr; gap: 16px; }
+
+  /* ── FOOTER ── */
+  .footer-logo img { width: 100px; height: 100px; }
+  .footer-info { font-size: 12px; }
+}
