@@ -239,6 +239,39 @@ header {
   grid-template-columns: 1fr 1fr;
   gap: 24px;
 }
+.contact-card {
+  margin-top: 48px;
+  border: 1px solid #e0dbd0;
+  border-radius: 12px;
+  padding: 32px 40px;
+  background: #faf8f5;
+  max-width: 480px;
+}
+.contact-card-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #4a5240;
+  letter-spacing: 0.08em;
+  margin-bottom: 20px;
+}
+.contact-row {
+  display: flex;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  color: #333;
+}
+.contact-row:last-child { border-bottom: none; }
+.contact-label {
+  width: 56px;
+  flex-shrink: 0;
+  color: #888;
+  font-size: 13px;
+}
+.contact-row a { color: #4a5240; text-decoration: none; }
+.contact-row a:hover { text-decoration: underline; }
 .recovery-photos img {
   width: 100%;
   height: auto;
