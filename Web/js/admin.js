@@ -460,6 +460,9 @@ document.getElementById('modal-admin-save').addEventListener('click', async () =
   btn.disabled = true
   btn.textContent = '처리 중...'
 
+  // 현재 슈퍼어드민 세션 저장 (signUp 후 세션이 신규 유저로 전환되므로)
+  const { data: { session: originalSession } } = await supabase.auth.getSession()
+
   // Supabase Auth 계정 생성
   const { data: signUpData, error: signUpError } = await supabase.auth.signUp({ email, password })
 
@@ -470,6 +473,12 @@ document.getElementById('modal-admin-save').addEventListener('click', async () =
 
   const newUserId = signUpData.user?.id
   if (!newUserId) { setError('admin-form-error', '계정 생성 후 ID를 가져오지 못했습니다.'); return }
+
+  // 슈퍼어드민 세션 복원
+  await supabase.auth.setSession({
+    access_token: originalSession.access_token,
+    refresh_token: originalSession.refresh_token
+  })
 
   // admin_profiles 등록
   const { error: profileError } = await supabase
