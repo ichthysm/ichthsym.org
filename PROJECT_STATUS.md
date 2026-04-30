@@ -11,11 +11,23 @@
 | 문서 | 설명 |
 |------|------|
 | [CLAUDE.md](./CLAUDE.md) | 개발 가이드, 아키텍처, 코드 컨벤션 |
+| [CHANGELOG.md](./CHANGELOG.md) | 전체 변경 이력 (아카이브) |
 | [VERSION](./VERSION) | 현재 버전 (단일 소스) |
 
 ---
 
 ## 최근 변경사항
+
+### v0.1.0 - admin.js P0 버그 수정 (2026-04-30)
+
+#### Backend (박안도)
+- `Web/js/admin.js` — `init()` AAL aal2 검증 추가: MFA 필수 계정이 세션 복원 시 TOTP 미완료면 TOTP 화면으로 강제 이동 (OTP 뒤로가기 우회 방지)
+- `Web/js/admin.js` — logout: `localStorage.clear()` + `sessionStorage.clear()` + `location.href` 리디렉션 (로그아웃 캐시 잔존 방지)
+- `Web/js/admin.js` — `loadAdmins()`: UUID 대신 `admin.email` 표시
+- `Web/js/admin.js` — `modal-admin-save`: `admin_profiles` INSERT에 `email` 포함
+- `supabase-admin-setup.sql` — `email` 컬럼 추가 (`ADD COLUMN IF NOT EXISTS`) + 기존 계정 email 동기화 쿼리 (`UPDATE ... FROM auth.users`) + INSERT 예시 업데이트
+
+---
 
 ### v0.1.0 - 관리자 페이지 구현 및 버그 분석 (2026-04-30)
 
@@ -33,10 +45,6 @@
 - Supabase RLS 정책 수정: SELECT 순환참조 제거 → `인증된 관리자 조회` 정책으로 교체
 - `Web/js/admin.js` — signUp 후 슈퍼어드민 세션 복원 버그 수정 (setSession)
 - `Web/js/admin.js` — TOTP QR 렌더링 버그 수정 (innerHTML → createElement)
-
-#### 버그 분석 완료 (미수정)
-- **OTP 뒤로가기 우회**: `signInWithPassword` 후 localStorage에 세션 저장 → `init()`이 TOTP 미완료 상태에서 대시보드 진입 허용. 수정: `init()`에서 AAL(aal2) 검증 추가 필요
-- **로그아웃 캐시 잔존**: `signOut()` 비동기 미완료 상태에서 `location.reload()` 실행. 수정: `location.href` 재지정 + `localStorage` 전체 초기화 필요
 
 ---
 
@@ -71,17 +79,19 @@
 ## 현재 진행 상황 (세션 인계용)
 
 ### 마지막 작업
-- 수행한 작업: 관리자 페이지 구현 완료 + 버그 2건 원인 분석
-- 수정한 파일: `Web/admin.html`, `Web/js/admin.js`, `supabase-admin-setup.sql`
-- 커밋 여부: 완료 (master 브랜치)
+- 수행한 작업: admin.js P0 버그 3건 수정 (OTP 우회 + 로그아웃 캐시 + UUID 표시)
+- 수정한 파일: `Web/js/admin.js`, `supabase-admin-setup.sql`
+- 커밋 여부: 완료 (master 브랜치, 8aef99e)
 
 ### 진행 중 작업 (미완료)
-- [ ] **OTP 뒤로가기 우회 버그 수정** — `init()`에서 AAL aal2 검증 추가
-- [ ] **로그아웃 캐시 잔존 버그 수정** — `location.href` 재지정 + localStorage 초기화
-- [ ] `Docs/익투스-고유번호증.jpeg` git 추적 해제 (`git rm --cached`)
+- [ ] **Supabase SQL 실행 필요** — 기존 계정 email 컬럼 동기화
+  ```sql
+  ALTER TABLE admin_profiles ADD COLUMN IF NOT EXISTS email text;
+  UPDATE admin_profiles ap SET email = au.email FROM auth.users au WHERE ap.id = au.id AND ap.email IS NULL;
+  ```
 
 ### 다음 세션 TODO
-1. **[P0]** admin.js 버그 2건 수정 (OTP 우회 + 로그아웃 캐시)
+1. **[P0]** 위 Supabase SQL 실행 확인 (기존 계정 email 채우기)
 2. **[P1]** Supabase Storage 이미지 업로드 기능 (공개 버킷, news_posts)
 3. **[P2]** 이용약관 페이지 추가 (footer 링크)
-4. **[P3]** `Docs/익투스-고유번호증.jpeg` 추적 해제
+4. **[P3]** `Docs/익투스-고유번호증.jpeg` 추적 해제 (`git rm --cached`)
