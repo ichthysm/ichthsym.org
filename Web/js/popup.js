@@ -75,9 +75,10 @@ function injectStyles() {
     .popup-close:hover { background: rgba(0,0,0,0.6); }
     .popup-img {
       width: 100%;
-      aspect-ratio: 16/9;
-      object-fit: cover;
+      max-height: 320px;
+      object-fit: contain;
       display: block;
+      background: #faf8f5;
     }
     .popup-notice-header {
       background: #4a5240;
