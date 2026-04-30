@@ -409,7 +409,7 @@ async function loadAdmins() {
           </div>
         </div>
         <div class="admin-card-actions">
-          <span class="role-badge ${admin.role}">${admin.role === 'super' ? '슈퍼어드민' : '편집자'}</span>
+          <span class="role-badge ${admin.role}">${admin.role === 'super' ? '관리자' : '편집자'}</span>
           <label class="mfa-toggle">
             <span>MFA 필수</span>
             <label class="toggle-switch">

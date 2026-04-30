@@ -419,7 +419,7 @@
       <div class="admin-panel" id="panel-admins">
         <div class="panel-header">
           <h2>관리자 관리</h2>
-          <button class="btn-add" id="btn-add-admin">+ 관리자 추가</button>
+          <button class="btn-add" id="btn-add-admin">+ 사용자 추가</button>
         </div>
         <div id="admins-list-wrap"><p class="loading-msg">불러오는 중...</p></div>
       </div>
@@ -497,7 +497,7 @@
 <!-- 관리자 추가 모달 -->
 <div class="modal-overlay" id="modal-admin">
   <div class="modal-box">
-    <div class="modal-title">관리자 추가</div>
+    <div class="modal-title">사용자 추가</div>
     <div class="form-group">
       <label>이름</label>
       <input type="text" id="admin-input-name" placeholder="홍길동" />
@@ -513,8 +513,8 @@
     <div class="form-group">
       <label>역할</label>
       <select id="admin-input-role" style="width:100%; padding:10px 14px; border:1px solid #ddd; border-radius:6px; font-size:14px; font-family:inherit;">
-        <option value="editor">편집자 (editor)</option>
-        <option value="super">슈퍼어드민 (super)</option>
+        <option value="editor">편집자</option>
+        <option value="super">관리자</option>
       </select>
     </div>
     <div class="form-group">
