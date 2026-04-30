@@ -44,6 +44,22 @@ async function init() {
   if (session) {
     currentUser = session.user
     await loadProfile()
+
+    if (currentProfile?.mfa_required) {
+      const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+      if (aalData?.currentLevel !== 'aal2') {
+        showLoginScreen()
+        const { data: factors } = await supabase.auth.mfa.listFactors()
+        const totpFactor = factors?.totp?.find(f => f.status === 'verified')
+        if (totpFactor) {
+          showStep('totp')
+        } else {
+          await startTotpEnroll()
+        }
+        return
+      }
+    }
+
     showDashboard()
     setupDashboard()
   } else {
@@ -187,9 +203,9 @@ async function loadProfile() {
 // ── 로그아웃 ──────────────────────────────────────────
 document.getElementById('btn-logout').addEventListener('click', async () => {
   await supabase.auth.signOut()
-  currentUser = null
-  currentProfile = null
-  location.reload()
+  localStorage.clear()
+  sessionStorage.clear()
+  location.href = 'admin.html'
 })
 
 // ── 대시보드 설정 ──────────────────────────────────────
@@ -405,7 +421,7 @@ async function loadAdmins() {
           <div class="admin-avatar">${admin.name?.charAt(0) || '?'}</div>
           <div>
             <div class="admin-name">${admin.name}</div>
-            <div class="admin-email">${admin.id}</div>
+            <div class="admin-email">${admin.email || ''}</div>
           </div>
         </div>
         <div class="admin-card-actions">
@@ -503,7 +519,7 @@ document.getElementById('modal-admin-save').addEventListener('click', async () =
   // admin_profiles 등록
   const { error: profileError } = await supabase
     .from('admin_profiles')
-    .insert({ id: newUserId, name, role, mfa_required })
+    .insert({ id: newUserId, name, email, role, mfa_required })
 
   if (profileError) { setError('admin-form-error', '프로필 등록 실패: ' + profileError.message); return }
 

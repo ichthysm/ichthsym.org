@@ -7,10 +7,14 @@
 CREATE TABLE IF NOT EXISTS admin_profiles (
   id           uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   name         text NOT NULL,
+  email        text,
   role         text NOT NULL DEFAULT 'editor' CHECK (role IN ('super', 'editor')),
   mfa_required boolean NOT NULL DEFAULT false,
   created_at   timestamptz NOT NULL DEFAULT now()
 );
+
+-- 기존 테이블에 email 컬럼 추가 (이미 테이블이 있는 경우)
+ALTER TABLE admin_profiles ADD COLUMN IF NOT EXISTS email text;
 
 -- 2. RLS 활성화
 ALTER TABLE admin_profiles ENABLE ROW LEVEL SECURITY;
@@ -88,10 +92,16 @@ CREATE POLICY "관리자 삭제" ON prayer_posts
     EXISTS (SELECT 1 FROM admin_profiles WHERE id = auth.uid())
   );
 
--- 6. 첫 번째 슈퍼어드민 등록 (Supabase Auth에서 계정 생성 후 UUID 확인)
+-- 6-a. 기존 계정 email 동기화 (email 컬럼 추가 후 1회 실행)
+UPDATE admin_profiles ap
+SET email = au.email
+FROM auth.users au
+WHERE ap.id = au.id AND ap.email IS NULL;
+
+-- 6-b. 첫 번째 슈퍼어드민 등록 (Supabase Auth에서 계정 생성 후 UUID 확인)
 -- Auth > Users 에서 생성한 계정의 UUID를 아래에 입력
--- INSERT INTO admin_profiles (id, name, role, mfa_required)
--- VALUES ('여기에-UUID-입력', '양건호', 'super', false);
+-- INSERT INTO admin_profiles (id, name, email, role, mfa_required)
+-- VALUES ('여기에-UUID-입력', '양건호', '이메일@example.com', 'super', false);
 
 -- ══════════════════════════════════════════════════════
 -- Supabase Dashboard 설정 (SQL 아님 — 수동 설정)
