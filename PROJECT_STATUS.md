@@ -1,6 +1,6 @@
 # ICHTHYS SOLACE — Project Status
 
-**마지막 업데이트**: 2026-04-30
+**마지막 업데이트**: 2026-04-30 (세션 2)
 **현재 버전**: v0.1.0
 **개발 브랜치**: master
 
@@ -17,6 +17,23 @@
 ---
 
 ## 최근 변경사항
+
+### v0.1.0 - 팝업 관리 기능 추가 (2026-04-30)
+
+#### Frontend (유아이)
+- `Web/admin.html` — 사이드바 "팝업 관리" 탭 추가
+- `Web/admin.html` — 팝업 패널 (목록: 제목/유형/상태/기간/관리)
+- `Web/admin.html` — 팝업 작성/수정 모달 (템플릿 3종 + 예약게시 + 활성화 토글)
+- `Web/js/popup.js` — 프론트 팝업 렌더러 신규 (최대 2개 동시, 오늘 하루 안보기, localStorage)
+- `Web/index.html` — popup.js 모듈 로드 추가
+
+#### Backend (박안도)
+- `Web/js/admin.js` — 팝업 CRUD 함수 추가 (`loadPopups`, `openPopupModal`, `getPopupStatus`, `formatDateRange`, `toDatetimeLocal`)
+- `Web/js/admin.js` — link_url 검증 (https:// 또는 / 시작 강제)
+- `Web/js/admin.js` — starts_at/ends_at 유효성 검사 (종료 > 시작)
+- `supabase-popup-setup.sql` — `popups` 테이블 + RLS 2개 정책 신규
+
+---
 
 ### v0.1.0 - admin.js P0 버그 수정 (2026-04-30)
 
@@ -79,11 +96,13 @@
 ## 현재 진행 상황 (세션 인계용)
 
 ### 마지막 작업
-- 수행한 작업: admin.js P0 버그 3건 수정 (OTP 우회 + 로그아웃 캐시 + UUID 표시)
-- 수정한 파일: `Web/js/admin.js`, `supabase-admin-setup.sql`
-- 커밋 여부: 완료 (master 브랜치, 8aef99e)
+- 수행한 작업: 팝업 관리 기능 전체 구현 (관리자 CRUD + 프론트 렌더러)
+- 신규 파일: `Web/js/popup.js`, `supabase-popup-setup.sql`
+- 수정 파일: `Web/admin.html`, `Web/js/admin.js`, `Web/index.html`
+- 커밋 여부: 완료 (master 브랜치, bac9ec2)
 
 ### 진행 중 작업 (미완료)
+- [ ] **Supabase SQL 실행 필요** — `supabase-popup-setup.sql` (popups 테이블 생성)
 - [ ] **Supabase SQL 실행 필요** — 기존 계정 email 컬럼 동기화
   ```sql
   ALTER TABLE admin_profiles ADD COLUMN IF NOT EXISTS email text;
@@ -91,7 +110,7 @@
   ```
 
 ### 다음 세션 TODO
-1. **[P0]** 위 Supabase SQL 실행 확인 (기존 계정 email 채우기)
-2. **[P1]** Supabase Storage 이미지 업로드 기능 (공개 버킷, news_posts)
+1. **[P0]** Supabase SQL 2건 실행 확인 (popup 테이블 + email 동기화)
+2. **[P1]** Supabase Storage 이미지 업로드 기능 (공개 버킷, news_posts + popups)
 3. **[P2]** 이용약관 페이지 추가 (footer 링크)
 4. **[P3]** `Docs/익투스-고유번호증.jpeg` 추적 해제 (`git rm --cached`)
