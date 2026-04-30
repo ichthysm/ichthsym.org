@@ -311,6 +311,29 @@
     .admin-sidebar { display: flex; flex-direction: column; }
     .sidebar-bottom { margin-top: auto; padding: 12px 16px; border-top: 1px solid #eee; }
     .success-msg { color: #2e7d32; font-size: 13px; margin-top: 8px; }
+
+    /* 팝업 관리 */
+    .popup-type-badge { padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 500; }
+    .popup-type-badge.image { background: #e8f0fe; color: #1967d2; }
+    .popup-type-badge.text { background: #eef0e8; color: #4a5240; }
+    .popup-type-badge.notice { background: #fff3e0; color: #e65100; }
+    .popup-status { padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 500; }
+    .popup-status.live { background: #e6f4ea; color: #188038; }
+    .popup-status.inactive { background: #f4f3ef; color: #888; }
+    .popup-status.scheduled { background: #fff3e0; color: #e65100; }
+    .popup-status.expired { background: #fdecea; color: #c0392b; }
+    .form-select {
+      width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 6px;
+      font-size: 14px; font-family: inherit; outline: none; background: #fff;
+    }
+    .form-select:focus { border-color: #4a5240; }
+    .form-datetime {
+      width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 6px;
+      font-size: 14px; font-family: inherit; outline: none;
+    }
+    .form-datetime:focus { border-color: #4a5240; }
+    .form-row { display: flex; gap: 12px; }
+    .form-row .form-group { flex: 1; }
   </style>
 </head>
 <body>
@@ -385,6 +408,7 @@
         <div class="sidebar-label">게시판</div>
         <button class="sidebar-btn active" data-panel="news">선교지 소식</button>
         <button class="sidebar-btn" data-panel="prayer">정기 기도 모임</button>
+        <button class="sidebar-btn" data-panel="popup">팝업 관리</button>
       </div>
       <hr class="sidebar-divider" />
       <div class="sidebar-section" id="sidebar-admin-section" style="display:none;">
@@ -413,6 +437,15 @@
           <button class="btn-add" id="btn-add-prayer">+ 새 기도 제목 작성</button>
         </div>
         <div id="prayer-table-wrap"><p class="loading-msg">불러오는 중...</p></div>
+      </div>
+
+      <!-- 팝업 관리 -->
+      <div class="admin-panel" id="panel-popup">
+        <div class="panel-header">
+          <h2>팝업 관리</h2>
+          <button class="btn-add" id="btn-add-popup">+ 팝업 추가</button>
+        </div>
+        <div id="popup-table-wrap"><p class="loading-msg">불러오는 중...</p></div>
       </div>
 
       <!-- 관리자 관리 -->
@@ -527,6 +560,58 @@
       <button class="btn-save" id="modal-admin-save">추가</button>
     </div>
     <div class="error-msg" id="admin-form-error"></div>
+  </div>
+</div>
+
+<!-- 팝업 작성/수정 모달 -->
+<div class="modal-overlay" id="modal-popup">
+  <div class="modal-box" style="max-width:580px;">
+    <div class="modal-title" id="modal-popup-title">팝업 추가</div>
+    <input type="hidden" id="popup-edit-id" />
+    <div class="form-group">
+      <label>템플릿 유형</label>
+      <select id="popup-input-type" class="form-select">
+        <option value="text">텍스트형</option>
+        <option value="image">이미지형</option>
+        <option value="notice">공지형</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>제목</label>
+      <input type="text" id="popup-input-title" placeholder="팝업 제목을 입력하세요" />
+    </div>
+    <div class="form-group">
+      <label>본문 (선택)</label>
+      <textarea id="popup-input-content" placeholder="내용을 입력하세요" style="min-height:80px;"></textarea>
+    </div>
+    <div class="form-group" id="popup-image-group" style="display:none;">
+      <label>이미지 URL</label>
+      <input type="url" id="popup-input-image" placeholder="https://..." />
+    </div>
+    <div class="form-group">
+      <label>링크 URL (선택)</label>
+      <input type="url" id="popup-input-link" placeholder="https://" />
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>게시 시작 (선택)</label>
+        <input type="datetime-local" id="popup-input-starts" class="form-datetime" />
+      </div>
+      <div class="form-group">
+        <label>게시 종료 (선택)</label>
+        <input type="datetime-local" id="popup-input-ends" class="form-datetime" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+        <input type="checkbox" id="popup-input-active" checked /> 활성화
+      </label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="modal-popup-cancel">취소</button>
+      <button class="btn-save" id="modal-popup-save">저장</button>
+    </div>
+    <div class="error-msg" id="popup-form-error"></div>
   </div>
 </div>
 

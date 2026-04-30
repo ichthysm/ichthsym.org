@@ -10,6 +10,7 @@ let currentUser = null
 let currentProfile = null
 let editingNewsId = null
 let editingPrayerId = null
+let editingPopupId = null
 
 // ── 유틸 ──────────────────────────────────────────
 function formatDate(iso) {
@@ -228,6 +229,7 @@ function setupDashboard() {
 
       if (btn.dataset.panel === 'news') loadNews()
       if (btn.dataset.panel === 'prayer') loadPrayer()
+      if (btn.dataset.panel === 'popup') loadPopups()
       if (btn.dataset.panel === 'admins') loadAdmins()
     })
   })
@@ -555,6 +557,153 @@ document.getElementById('modal-password-save').addEventListener('click', async (
 
   document.getElementById('pw-form-success').textContent = '비밀번호가 변경되었습니다.'
   setTimeout(() => document.getElementById('modal-password').classList.remove('open'), 1500)
+})
+
+// ── 팝업 관리 ──────────────────────────────────────────
+
+function getPopupStatus(popup) {
+  if (!popup.is_active) return { label: '비활성', cls: 'inactive' }
+  const now = Date.now()
+  const start = popup.starts_at ? new Date(popup.starts_at).getTime() : 0
+  const end = popup.ends_at ? new Date(popup.ends_at).getTime() : Infinity
+  if (now < start) return { label: '예약', cls: 'scheduled' }
+  if (now > end) return { label: '만료', cls: 'expired' }
+  return { label: '게시 중', cls: 'live' }
+}
+
+function formatDateRange(starts_at, ends_at) {
+  const fmt = iso => {
+    if (!iso) return ''
+    const d = new Date(iso)
+    return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`
+  }
+  if (!starts_at && !ends_at) return '상시'
+  if (!starts_at) return `~ ${fmt(ends_at)}`
+  if (!ends_at) return `${fmt(starts_at)} ~`
+  return `${fmt(starts_at)} ~ ${fmt(ends_at)}`
+}
+
+function toDatetimeLocal(iso) {
+  if (!iso) return ''
+  const d = new Date(iso)
+  const pad = n => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
+}
+
+async function loadPopups() {
+  const wrap = document.getElementById('popup-table-wrap')
+  wrap.innerHTML = '<p class="loading-msg">불러오는 중...</p>'
+
+  const { data, error } = await supabase
+    .from('popups')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  if (error) { wrap.innerHTML = '<p class="loading-msg">불러오기 실패</p>'; return }
+  if (!data.length) { wrap.innerHTML = '<p class="empty-state">등록된 팝업이 없습니다.</p>'; return }
+
+  const typeLabel = { image: '이미지형', text: '텍스트형', notice: '공지형' }
+
+  wrap.innerHTML = `
+    <table class="post-table">
+      <thead><tr><th>제목</th><th>유형</th><th>상태</th><th>기간</th><th>관리</th></tr></thead>
+      <tbody>
+        ${data.map(p => {
+          const status = getPopupStatus(p)
+          return `
+            <tr>
+              <td class="post-title-cell"><span class="post-title-text">${p.title}</span></td>
+              <td><span class="popup-type-badge ${p.type}">${typeLabel[p.type] || p.type}</span></td>
+              <td><span class="popup-status ${status.cls}">${status.label}</span></td>
+              <td class="post-date">${formatDateRange(p.starts_at, p.ends_at)}</td>
+              <td>
+                <button class="btn-edit" data-id="${p.id}" data-action="edit-popup">수정</button>
+                <button class="btn-delete" data-id="${p.id}" data-action="delete-popup">삭제</button>
+              </td>
+            </tr>`
+        }).join('')}
+      </tbody>
+    </table>`
+
+  wrap.querySelectorAll('[data-action]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (btn.dataset.action === 'edit-popup') {
+        const popup = data.find(p => p.id === btn.dataset.id)
+        openPopupModal(popup)
+      }
+      if (btn.dataset.action === 'delete-popup') {
+        if (!confirm('이 팝업을 삭제하시겠습니까?')) return
+        await supabase.from('popups').delete().eq('id', btn.dataset.id)
+        loadPopups()
+      }
+    })
+  })
+}
+
+function toggleImageField() {
+  const type = document.getElementById('popup-input-type').value
+  document.getElementById('popup-image-group').style.display = type === 'image' ? 'block' : 'none'
+}
+
+function openPopupModal(popup = null) {
+  editingPopupId = popup?.id || null
+  document.getElementById('modal-popup-title').textContent = popup ? '팝업 수정' : '팝업 추가'
+  document.getElementById('popup-input-type').value = popup?.type || 'text'
+  document.getElementById('popup-input-title').value = popup?.title || ''
+  document.getElementById('popup-input-content').value = popup?.content || ''
+  document.getElementById('popup-input-image').value = popup?.image_url || ''
+  document.getElementById('popup-input-link').value = popup?.link_url || ''
+  document.getElementById('popup-input-starts').value = toDatetimeLocal(popup?.starts_at)
+  document.getElementById('popup-input-ends').value = toDatetimeLocal(popup?.ends_at)
+  document.getElementById('popup-input-active').checked = popup ? popup.is_active : true
+  document.getElementById('popup-form-error').textContent = ''
+  toggleImageField()
+  document.getElementById('modal-popup').classList.add('open')
+}
+
+document.getElementById('popup-input-type').addEventListener('change', toggleImageField)
+document.getElementById('btn-add-popup').addEventListener('click', () => openPopupModal())
+document.getElementById('modal-popup-cancel').addEventListener('click', () => {
+  document.getElementById('modal-popup').classList.remove('open')
+})
+
+document.getElementById('modal-popup-save').addEventListener('click', async () => {
+  const type = document.getElementById('popup-input-type').value
+  const title = document.getElementById('popup-input-title').value.trim()
+  const content = document.getElementById('popup-input-content').value.trim() || null
+  const image_url = document.getElementById('popup-input-image').value.trim() || null
+  const link_url = document.getElementById('popup-input-link').value.trim() || null
+  const starts_raw = document.getElementById('popup-input-starts').value
+  const ends_raw = document.getElementById('popup-input-ends').value
+  const is_active = document.getElementById('popup-input-active').checked
+  setError('popup-form-error', '')
+
+  if (!title) { setError('popup-form-error', '제목을 입력하세요.'); return }
+  if (type === 'image' && !image_url) { setError('popup-form-error', '이미지형 팝업은 이미지 URL이 필요합니다.'); return }
+  if (link_url && !/^https?:\/\/|^\//.test(link_url)) {
+    setError('popup-form-error', '링크 URL은 https:// 또는 /로 시작해야 합니다.'); return
+  }
+
+  const starts_at = starts_raw ? new Date(starts_raw).toISOString() : null
+  const ends_at = ends_raw ? new Date(ends_raw).toISOString() : null
+  if (starts_at && ends_at && new Date(starts_at) >= new Date(ends_at)) {
+    setError('popup-form-error', '종료일은 시작일 이후여야 합니다.'); return
+  }
+
+  const payload = { type, title, content, image_url, link_url, starts_at, ends_at, is_active, updated_at: new Date().toISOString() }
+  let error
+
+  if (editingPopupId) {
+    ;({ error } = await supabase.from('popups').update(payload).eq('id', editingPopupId))
+  } else {
+    payload.created_by = currentUser.id
+    ;({ error } = await supabase.from('popups').insert(payload))
+  }
+
+  if (error) { setError('popup-form-error', '저장에 실패했습니다: ' + error.message); return }
+
+  document.getElementById('modal-popup').classList.remove('open')
+  loadPopups()
 })
 
 // ── 모달 외부 클릭으로 닫기 ──────────────────────────────
