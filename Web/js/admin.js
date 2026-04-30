@@ -496,6 +496,36 @@ document.getElementById('modal-admin-save').addEventListener('click', async () =
   loadAdmins()
 })
 
+// ── 비밀번호 변경 ──────────────────────────────────────────
+document.getElementById('btn-my-account').addEventListener('click', () => {
+  document.getElementById('pw-input-new').value = ''
+  document.getElementById('pw-input-confirm').value = ''
+  document.getElementById('pw-form-error').textContent = ''
+  document.getElementById('pw-form-success').textContent = ''
+  document.getElementById('modal-password').classList.add('open')
+})
+
+document.getElementById('modal-password-cancel').addEventListener('click', () => {
+  document.getElementById('modal-password').classList.remove('open')
+})
+
+document.getElementById('modal-password-save').addEventListener('click', async () => {
+  const newPw = document.getElementById('pw-input-new').value
+  const confirm = document.getElementById('pw-input-confirm').value
+  document.getElementById('pw-form-error').textContent = ''
+  document.getElementById('pw-form-success').textContent = ''
+
+  if (newPw.length < 8) { document.getElementById('pw-form-error').textContent = '비밀번호는 8자 이상이어야 합니다.'; return }
+  if (newPw !== confirm) { document.getElementById('pw-form-error').textContent = '비밀번호가 일치하지 않습니다.'; return }
+
+  const { error } = await supabase.auth.updateUser({ password: newPw })
+
+  if (error) { document.getElementById('pw-form-error').textContent = '변경 실패: ' + error.message; return }
+
+  document.getElementById('pw-form-success').textContent = '비밀번호가 변경되었습니다.'
+  setTimeout(() => document.getElementById('modal-password').classList.remove('open'), 1500)
+})
+
 // ── 모달 외부 클릭으로 닫기 ──────────────────────────────
 document.querySelectorAll('.modal-overlay').forEach(overlay => {
   overlay.addEventListener('click', e => {
