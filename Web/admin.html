@@ -349,11 +349,12 @@
     <!-- Step 3: TOTP 등록 -->
     <div id="step-totp-enroll" style="display:none;">
       <div class="login-title">인증 앱 등록</div>
-      <p class="login-hint">Google Authenticator 앱으로 아래 QR코드를 스캔하세요.<br>등록 후 생성된 6자리 코드를 입력하세요.</p>
-      <div id="totp-qr" style="text-align:center; margin:24px 0;"></div>
+      <p class="login-hint">Google Authenticator 앱으로 아래 QR코드를 스캔한 후<br>생성된 6자리 코드를 입력하세요.</p>
+      <div id="totp-qr" style="display:flex; justify-content:center; align-items:center; margin:28px 0 20px;"></div>
       <div class="form-group">
         <label>인증 코드</label>
-        <input type="text" id="input-enroll-code" placeholder="000000" maxlength="6" inputmode="numeric" style="letter-spacing:0.3em; font-size:20px; text-align:center;" />
+        <input type="text" id="input-enroll-code" placeholder="000000" maxlength="6" inputmode="numeric"
+          style="letter-spacing:0.4em; font-size:22px; text-align:center; font-weight:600;" />
       </div>
       <button class="btn-primary" id="btn-enroll">등록 완료</button>
       <div class="login-error" id="enroll-error"></div>

@@ -147,7 +147,12 @@ async function startTotpEnroll() {
 
   // QR 코드 이미지 표시
   const qrContainer = document.getElementById('totp-qr')
-  qrContainer.innerHTML = `<img src="${data.totp.qr_code}" alt="QR Code" style="width:180px;height:180px;" />`
+  qrContainer.innerHTML = ''
+  const img = document.createElement('img')
+  img.src = data.totp.qr_code
+  img.alt = 'QR Code'
+  img.style.cssText = 'width:200px;height:200px;border-radius:8px;border:1px solid #e8e4dc;padding:8px;background:#fff;'
+  qrContainer.appendChild(img)
   qrContainer.dataset.factorId = data.id
 
   showStep('totp-enroll')
