@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ICHTHYS SOLACE — 관리자</title>
+  <link rel="icon" type="image/png" href="img/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Noto Sans KR', sans-serif; background: #f4f3ef; color: #1a1a1a; min-height: 100vh; }
+
+    /* ── 로그인 ── */
+    #login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #faf8f5;
+    }
+    .login-box {
+      width: 100%;
+      max-width: 400px;
+      padding: 48px 40px;
+      background: #fff;
+      border: 1px solid #e8e4dc;
+      border-radius: 12px;
+    }
+    .login-logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .login-logo img { height: 64px; }
+    .login-logo p { font-size: 12px; color: #888; margin-top: 8px; letter-spacing: 0.05em; }
+    .login-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #4a5240;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 12px; color: #666; margin-bottom: 6px; }
+    .form-group input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border 0.2s;
+    }
+    .form-group input:focus { border-color: #4a5240; }
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      background: #4a5240;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover { background: #3a4132; }
+    .btn-primary:disabled { background: #aaa; cursor: not-allowed; }
+    .login-error {
+      color: #c0392b;
+      font-size: 13px;
+      margin-top: 12px;
+      text-align: center;
+      min-height: 20px;
+    }
+    .login-hint {
+      font-size: 12px;
+      color: #888;
+      text-align: center;
+      margin-top: 16px;
+      line-height: 1.6;
+    }
+
+    /* ── 대시보드 ── */
+    #dashboard { display: none; min-height: 100vh; }
+    .admin-header {
+      background: #4a5240;
+      color: #fff;
+      padding: 0 32px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .admin-header-left { display: flex; align-items: center; gap: 12px; }
+    .admin-header-left img { height: 32px; }
+    .admin-header-title { font-family: 'Noto Serif KR', serif; font-size: 14px; letter-spacing: 0.05em; }
+    .admin-user-info { font-size: 13px; color: rgba(255,255,255,0.8); display: flex; align-items: center; gap: 16px; }
+    .btn-logout {
+      padding: 6px 14px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .btn-logout:hover { background: rgba(255,255,255,0.25); }
+
+    .admin-body { display: flex; min-height: calc(100vh - 56px); }
+
+    /* 사이드바 */
+    .admin-sidebar {
+      width: 200px;
+      background: #fff;
+      border-right: 1px solid #e8e4dc;
+      padding: 24px 0;
+      flex-shrink: 0;
+    }
+    .sidebar-section { padding: 0 16px; margin-bottom: 8px; }
+    .sidebar-label { font-size: 10px; color: #aaa; letter-spacing: 0.1em; padding: 0 8px; margin-bottom: 4px; }
+    .sidebar-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      border: none;
+      background: none;
+      font-size: 13px;
+      font-family: inherit;
+      color: #555;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .sidebar-btn:hover { background: #f4f3ef; color: #1a1a1a; }
+    .sidebar-btn.active { background: #eef0e8; color: #4a5240; font-weight: 500; }
+    .sidebar-divider { border: none; border-top: 1px solid #eee; margin: 12px 16px; }
+
+    /* 메인 콘텐츠 */
+    .admin-main { flex: 1; padding: 32px; overflow-y: auto; }
+    .admin-panel { display: none; }
+    .admin-panel.active { display: block; }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .panel-header h2 { font-family: 'Noto Serif KR', serif; font-size: 20px; color: #4a5240; }
+    .btn-add {
+      padding: 8px 18px;
+      background: #4a5240;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .btn-add:hover { background: #3a4132; }
+
+    /* 폼 모달 */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 32px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 16px;
+      color: #4a5240;
+      margin-bottom: 20px;
+    }
+    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+    .btn-cancel {
+      padding: 8px 18px;
+      background: #f4f3ef;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .btn-save {
+      padding: 8px 18px;
+      background: #4a5240;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .btn-save:hover { background: #3a4132; }
+    textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 120px;
+      outline: none;
+    }
+    textarea:focus { border-color: #4a5240; }
+
+    /* 게시물 테이블 */
+    .post-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; border: 1px solid #e8e4dc; }
+    .post-table th { background: #f4f3ef; padding: 12px 16px; text-align: left; font-size: 12px; color: #666; font-weight: 500; }
+    .post-table td { padding: 12px 16px; border-top: 1px solid #f0ece4; font-size: 13px; vertical-align: middle; }
+    .post-table tr:hover td { background: #faf8f5; }
+    .post-title-cell { max-width: 280px; }
+    .post-title-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 260px; display: block; }
+    .post-date { color: #888; font-size: 12px; white-space: nowrap; }
+    .btn-edit, .btn-delete {
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: inherit;
+      cursor: pointer;
+      border: 1px solid;
+    }
+    .btn-edit { background: #fff; border-color: #4a5240; color: #4a5240; margin-right: 4px; }
+    .btn-edit:hover { background: #eef0e8; }
+    .btn-delete { background: #fff; border-color: #c0392b; color: #c0392b; }
+    .btn-delete:hover { background: #fdecea; }
+    .empty-state { text-align: center; padding: 48px; color: #aaa; font-size: 14px; }
+
+    /* 관리자 목록 */
+    .admin-card-list { display: flex; flex-direction: column; gap: 12px; }
+    .admin-card {
+      background: #fff;
+      border: 1px solid #e8e4dc;
+      border-radius: 8px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .admin-card-info { display: flex; align-items: center; gap: 16px; }
+    .admin-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: #eef0e8;
+      color: #4a5240;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 600;
+    }
+    .admin-name { font-size: 14px; font-weight: 500; }
+    .admin-email { font-size: 12px; color: #888; margin-top: 2px; }
+    .admin-card-actions { display: flex; align-items: center; gap: 12px; }
+    .role-badge {
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+    .role-badge.super { background: #4a5240; color: #fff; }
+    .role-badge.editor { background: #eef0e8; color: #4a5240; }
+    .mfa-toggle { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #666; }
+    .toggle-switch {
+      position: relative;
+      width: 36px; height: 20px;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: #ccc;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 14px; height: 14px;
+      left: 3px; top: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+    .toggle-switch input:checked + .toggle-slider { background: #4a5240; }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(16px); }
+
+    .loading-msg { color: #888; font-size: 14px; padding: 24px 0; }
+    .error-msg { color: #c0392b; font-size: 13px; margin-top: 8px; }
+  </style>
+</head>
+<body>
+
+<!-- 로그인 화면 -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="img/17_logo_banner.png" alt="ICHTHYS SOLACE" />
+      <p>ADMINISTRATOR</p>
+    </div>
+
+    <!-- Step 1: 이메일 + 패스워드 -->
+    <div id="step-password">
+      <div class="login-title">관리자 로그인</div>
+      <div class="form-group">
+        <label>이메일</label>
+        <input type="email" id="input-email" placeholder="admin@example.com" />
+      </div>
+      <div class="form-group">
+        <label>패스워드</label>
+        <input type="password" id="input-password" placeholder="••••••••" />
+      </div>
+      <button class="btn-primary" id="btn-login">로그인</button>
+      <div class="login-error" id="login-error"></div>
+    </div>
+
+    <!-- Step 2: TOTP -->
+    <div id="step-totp" style="display:none;">
+      <div class="login-title">인증 코드 입력</div>
+      <p class="login-hint">Google Authenticator 앱의 6자리 코드를 입력하세요.</p>
+      <div class="form-group" style="margin-top:20px;">
+        <label>TOTP 코드</label>
+        <input type="text" id="input-totp" placeholder="000000" maxlength="6" inputmode="numeric" style="letter-spacing:0.3em; font-size:20px; text-align:center;" />
+      </div>
+      <button class="btn-primary" id="btn-totp">확인</button>
+      <div class="login-error" id="totp-error"></div>
+    </div>
+
+    <!-- Step 3: TOTP 등록 -->
+    <div id="step-totp-enroll" style="display:none;">
+      <div class="login-title">인증 앱 등록</div>
+      <p class="login-hint">Google Authenticator 앱으로 아래 QR코드를 스캔하세요.<br>등록 후 생성된 6자리 코드를 입력하세요.</p>
+      <div id="totp-qr" style="text-align:center; margin:24px 0;"></div>
+      <div class="form-group">
+        <label>인증 코드</label>
+        <input type="text" id="input-enroll-code" placeholder="000000" maxlength="6" inputmode="numeric" style="letter-spacing:0.3em; font-size:20px; text-align:center;" />
+      </div>
+      <button class="btn-primary" id="btn-enroll">등록 완료</button>
+      <div class="login-error" id="enroll-error"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 대시보드 -->
+<div id="dashboard">
+  <header class="admin-header">
+    <div class="admin-header-left">
+      <img src="img/17_logo_banner.png" alt="ICHTHYS SOLACE" />
+      <span class="admin-header-title">관리자 페이지</span>
+    </div>
+    <div class="admin-user-info">
+      <span id="header-username"></span>
+      <button class="btn-logout" id="btn-logout">로그아웃</button>
+    </div>
+  </header>
+
+  <div class="admin-body">
+    <nav class="admin-sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">게시판</div>
+        <button class="sidebar-btn active" data-panel="news">📰 선교지 소식</button>
+        <button class="sidebar-btn" data-panel="prayer">🙏 정기 기도 모임</button>
+      </div>
+      <hr class="sidebar-divider" />
+      <div class="sidebar-section" id="sidebar-admin-section" style="display:none;">
+        <div class="sidebar-label">설정</div>
+        <button class="sidebar-btn" data-panel="admins">👤 관리자 관리</button>
+      </div>
+    </nav>
+
+    <main class="admin-main">
+      <!-- 선교지 소식 -->
+      <div class="admin-panel active" id="panel-news">
+        <div class="panel-header">
+          <h2>선교지 소식</h2>
+          <button class="btn-add" id="btn-add-news">+ 새 소식 작성</button>
+        </div>
+        <div id="news-table-wrap"><p class="loading-msg">불러오는 중...</p></div>
+      </div>
+
+      <!-- 정기 기도 모임 -->
+      <div class="admin-panel" id="panel-prayer">
+        <div class="panel-header">
+          <h2>정기 기도 모임</h2>
+          <button class="btn-add" id="btn-add-prayer">+ 새 기도 제목 작성</button>
+        </div>
+        <div id="prayer-table-wrap"><p class="loading-msg">불러오는 중...</p></div>
+      </div>
+
+      <!-- 관리자 관리 -->
+      <div class="admin-panel" id="panel-admins">
+        <div class="panel-header">
+          <h2>관리자 관리</h2>
+          <button class="btn-add" id="btn-add-admin">+ 관리자 추가</button>
+        </div>
+        <div id="admins-list-wrap"><p class="loading-msg">불러오는 중...</p></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- 소식 작성/수정 모달 -->
+<div class="modal-overlay" id="modal-news">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-news-title">소식 작성</div>
+    <input type="hidden" id="news-edit-id" />
+    <div class="form-group">
+      <label>제목</label>
+      <input type="text" id="news-input-title" placeholder="제목을 입력하세요" />
+    </div>
+    <div class="form-group">
+      <label>본문</label>
+      <textarea id="news-input-content" placeholder="내용을 입력하세요"></textarea>
+    </div>
+    <div class="form-group">
+      <label>이미지 URL (선택)</label>
+      <input type="url" id="news-input-image" placeholder="https://..." />
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="modal-news-cancel">취소</button>
+      <button class="btn-save" id="modal-news-save">저장</button>
+    </div>
+    <div class="error-msg" id="news-form-error"></div>
+  </div>
+</div>
+
+<!-- 기도 제목 작성/수정 모달 -->
+<div class="modal-overlay" id="modal-prayer">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-prayer-title">기도 제목 작성</div>
+    <input type="hidden" id="prayer-edit-id" />
+    <div class="form-group">
+      <label>제목</label>
+      <input type="text" id="prayer-input-title" placeholder="제목을 입력하세요" />
+    </div>
+    <div class="form-group">
+      <label>본문</label>
+      <textarea id="prayer-input-content" placeholder="내용을 입력하세요"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="modal-prayer-cancel">취소</button>
+      <button class="btn-save" id="modal-prayer-save">저장</button>
+    </div>
+    <div class="error-msg" id="prayer-form-error"></div>
+  </div>
+</div>
+
+<!-- 관리자 추가 모달 -->
+<div class="modal-overlay" id="modal-admin">
+  <div class="modal-box">
+    <div class="modal-title">관리자 추가</div>
+    <div class="form-group">
+      <label>이름</label>
+      <input type="text" id="admin-input-name" placeholder="홍길동" />
+    </div>
+    <div class="form-group">
+      <label>이메일</label>
+      <input type="email" id="admin-input-email" placeholder="admin@example.com" />
+    </div>
+    <div class="form-group">
+      <label>임시 패스워드</label>
+      <input type="text" id="admin-input-password" placeholder="8자 이상" />
+    </div>
+    <div class="form-group">
+      <label>역할</label>
+      <select id="admin-input-role" style="width:100%; padding:10px 14px; border:1px solid #ddd; border-radius:6px; font-size:14px; font-family:inherit;">
+        <option value="editor">편집자 (editor)</option>
+        <option value="super">슈퍼어드민 (super)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+        <input type="checkbox" id="admin-input-mfa" /> MFA 필수 적용
+      </label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="modal-admin-cancel">취소</button>
+      <button class="btn-save" id="modal-admin-save">추가</button>
+    </div>
+    <div class="error-msg" id="admin-form-error"></div>
+  </div>
+</div>
+
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>
