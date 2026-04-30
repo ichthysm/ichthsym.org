@@ -706,8 +706,9 @@ document.getElementById('modal-popup-save').addEventListener('click', async () =
   loadPopups()
 })
 
-// ── 모달 외부 클릭으로 닫기 ──────────────────────────────
+// ── 모달 외부 클릭으로 닫기 (팝업 모달 제외 — 필드 많아 오클릭 위험) ──────────────────────
 document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  if (overlay.id === 'modal-popup') return
   overlay.addEventListener('click', e => {
     if (e.target === overlay) overlay.classList.remove('open')
   })
