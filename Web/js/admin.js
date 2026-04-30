@@ -417,6 +417,9 @@ async function loadAdmins() {
               <span class="toggle-slider"></span>
             </label>
           </label>
+          ${admin.id !== currentUser.id
+            ? `<button class="btn-delete" data-admin-id="${admin.id}" data-admin-name="${admin.name}" data-action="delete-admin">삭제</button>`
+            : ''}
         </div>
       </div>
     `).join('')}
@@ -432,6 +435,18 @@ async function loadAdmins() {
         alert('MFA 설정 변경에 실패했습니다.')
         checkbox.checked = !checkbox.checked
       }
+    })
+  })
+
+  wrap.querySelectorAll('[data-action="delete-admin"]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (!confirm(`'${btn.dataset.adminName}' 사용자를 삭제하시겠습니까?\n관리자 권한이 제거됩니다.`)) return
+      const { error } = await supabase
+        .from('admin_profiles')
+        .delete()
+        .eq('id', btn.dataset.adminId)
+      if (error) { alert('삭제 실패: ' + error.message); return }
+      loadAdmins()
     })
   })
 }
