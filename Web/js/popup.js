@@ -125,16 +125,23 @@ function injectStyles() {
       display: flex;
       justify-content: flex-end;
     }
-    .popup-hide-btn {
-      background: none;
-      border: none;
+    .popup-hide-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
       font-size: 12px;
-      color: #bbb;
+      color: #aaa;
       cursor: pointer;
-      font-family: inherit;
-      padding: 4px 0;
+      user-select: none;
     }
-    .popup-hide-btn:hover { color: #888; text-decoration: underline; }
+    .popup-hide-label:hover { color: #888; }
+    .popup-hide-label input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      cursor: pointer;
+      accent-color: #4a5240;
+      margin: 0;
+    }
     @media (max-width: 768px) {
       .popup-group { flex-direction: column; align-items: center; }
       .popup-card { max-width: 100%; }
@@ -207,14 +214,19 @@ function buildCard(popup) {
 
   const footer = document.createElement('div')
   footer.className = 'popup-footer'
-  const hideBtn = document.createElement('button')
-  hideBtn.className = 'popup-hide-btn'
-  hideBtn.textContent = '오늘 하루 보지 않기'
-  hideBtn.addEventListener('click', () => {
-    hideToday(popup.id)
-    removePopup(popup.id)
+  const label = document.createElement('label')
+  label.className = 'popup-hide-label'
+  const checkbox = document.createElement('input')
+  checkbox.type = 'checkbox'
+  checkbox.addEventListener('change', () => {
+    if (checkbox.checked) {
+      hideToday(popup.id)
+      removePopup(popup.id)
+    }
   })
-  footer.appendChild(hideBtn)
+  label.appendChild(checkbox)
+  label.appendChild(document.createTextNode('오늘 하루 그만 보기'))
+  footer.appendChild(label)
   card.appendChild(footer)
 
   return card
