@@ -240,11 +240,11 @@ function buildCard(popup) {
   label.appendChild(document.createTextNode('오늘 하루 그만 보기'))
   footer.appendChild(label)
 
-  const closeBtn = document.createElement('button')
-  closeBtn.className = 'popup-close-btn'
-  closeBtn.textContent = '닫기'
-  closeBtn.addEventListener('click', () => removePopup(popup.id))
-  footer.appendChild(closeBtn)
+  const dismissBtn = document.createElement('button')
+  dismissBtn.className = 'popup-close-btn'
+  dismissBtn.textContent = '닫기'
+  dismissBtn.addEventListener('click', () => removePopup(popup.id))
+  footer.appendChild(dismissBtn)
 
   card.appendChild(footer)
 
