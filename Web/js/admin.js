@@ -678,7 +678,6 @@ document.getElementById('modal-popup-save').addEventListener('click', async () =
   const is_active = document.getElementById('popup-input-active').checked
   setError('popup-form-error', '')
 
-  if (!title) { setError('popup-form-error', '제목을 입력하세요.'); return }
   if (type === 'image' && !image_url) { setError('popup-form-error', '이미지형 팝업은 이미지 URL이 필요합니다.'); return }
   if (link_url && !/^https?:\/\/|^\//.test(link_url)) {
     setError('popup-form-error', '링크 URL은 https:// 또는 /로 시작해야 합니다.'); return

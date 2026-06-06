@@ -198,10 +198,12 @@ function buildCard(popup) {
   const body = document.createElement('div')
   body.className = 'popup-body'
 
-  const titleEl = document.createElement('div')
-  titleEl.className = 'popup-title'
-  titleEl.textContent = popup.title
-  body.appendChild(titleEl)
+  if (popup.title) {
+    const titleEl = document.createElement('div')
+    titleEl.className = 'popup-title'
+    titleEl.textContent = popup.title
+    body.appendChild(titleEl)
+  }
 
   if (popup.content) {
     const contentEl = document.createElement('div')
