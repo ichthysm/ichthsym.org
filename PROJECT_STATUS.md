@@ -1,6 +1,6 @@
 # ICHTHYS SOLACE — Project Status
 
-**마지막 업데이트**: 2026-04-30 (세션 2)
+**마지막 업데이트**: 2026-06-06
 **현재 버전**: v0.1.0
 **개발 브랜치**: master
 
@@ -17,6 +17,25 @@
 ---
 
 ## 최근 변경사항
+
+### v0.1.0 - 팝업 UX 개선 (2026-06-06)
+
+#### Frontend (유아이)
+- `Web/js/popup.js` — "오늘 하루 보지 않기" 버튼 → 체크박스로 교체
+- `Web/js/popup.js` — 푸터에 "닫기" 버튼 추가 (좌: 체크박스, 우: 닫기)
+- `Web/js/popup.js` — 이미지 세로형 포스터 잘림 수정 (`height:auto` + `max-height:75vh`)
+- `Web/js/popup.js` — `closeBtn` 중복 선언 SyntaxError 수정
+- `Web/admin.html` — 팝업 모달 backdrop 클릭 닫기 제외 (오클릭 방지)
+- `Web/admin.html` — 팝업 제목 필드 선택사항으로 변경
+
+#### Backend (박안도)
+- `Web/js/admin.js` — 팝업 모달 backdrop 클릭 닫기 제외 처리
+- `Web/js/admin.js` — 팝업 제목 필수 검증 제거
+
+#### DevOps (배포준)
+- `Docs/익투스-고유번호증.jpeg` git 추적 해제 + `.gitignore` 등록
+
+---
 
 ### v0.1.0 - 팝업 관리 기능 추가 (2026-04-30)
 
@@ -96,10 +115,9 @@
 ## 현재 진행 상황 (세션 인계용)
 
 ### 마지막 작업
-- 수행한 작업: 팝업 관리 기능 전체 구현 (관리자 CRUD + 프론트 렌더러)
-- 신규 파일: `Web/js/popup.js`, `supabase-popup-setup.sql`
-- 수정 파일: `Web/admin.html`, `Web/js/admin.js`, `Web/index.html`
-- 커밋 여부: 완료 (master 브랜치, bac9ec2)
+- 수행한 작업: 팝업 UX 개선 다수 (체크박스, 닫기 버튼, 이미지 세로형 수정, SyntaxError 수정)
+- 수정 파일: `Web/js/popup.js`, `Web/admin.html`, `Web/js/admin.js`
+- 커밋 여부: 완료 (master 브랜치, c54115d)
 
 ### 진행 중 작업 (미완료)
 - [ ] **Supabase SQL 실행 필요** — `supabase-popup-setup.sql` (popups 테이블 생성)
@@ -111,6 +129,5 @@
 
 ### 다음 세션 TODO
 1. **[P0]** Supabase SQL 2건 실행 확인 (popup 테이블 + email 동기화)
-2. **[P1]** Supabase Storage 이미지 업로드 기능 (공개 버킷, news_posts + popups)
+2. **[P1]** Supabase Storage 이미지 업로드 기능 (관리자 페이지에서 직접 업로드, 공개 버킷)
 3. **[P2]** 이용약관 페이지 추가 (footer 링크)
-4. **[P3]** `Docs/익투스-고유번호증.jpeg` 추적 해제 (`git rm --cached`)
