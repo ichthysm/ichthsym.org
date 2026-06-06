@@ -122,8 +122,19 @@ function injectStyles() {
       border-top: 1px solid #f0ece4;
       padding: 10px 20px;
       display: flex;
-      justify-content: flex-end;
+      align-items: center;
+      justify-content: space-between;
     }
+    .popup-close-btn {
+      background: none;
+      border: none;
+      font-size: 12px;
+      color: #aaa;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 4px 0;
+    }
+    .popup-close-btn:hover { color: #555; }
     .popup-hide-label {
       display: flex;
       align-items: center;
@@ -226,6 +237,13 @@ function buildCard(popup) {
   label.appendChild(checkbox)
   label.appendChild(document.createTextNode('오늘 하루 그만 보기'))
   footer.appendChild(label)
+
+  const closeBtn = document.createElement('button')
+  closeBtn.className = 'popup-close-btn'
+  closeBtn.textContent = '닫기'
+  closeBtn.addEventListener('click', () => removePopup(popup.id))
+  footer.appendChild(closeBtn)
+
   card.appendChild(footer)
 
   return card
