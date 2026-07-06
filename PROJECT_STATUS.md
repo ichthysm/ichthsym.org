@@ -1,6 +1,6 @@
 # ICHTHYS SOLACE — Project Status
 
-**마지막 업데이트**: 2026-06-06
+**마지막 업데이트**: 2026-07-06
 **현재 버전**: v0.1.0
 **개발 브랜치**: master
 
@@ -17,6 +17,19 @@
 ---
 
 ## 최근 변경사항
+
+### v0.1.0 - 미디어 라이브러리 강화 (2026-07-06)
+
+#### Frontend (유아이)
+- `Web/admin.html` — 미디어 패널 삭제 버튼 CSS 추가 (`.btn-media-delete`, `.media-item-actions`)
+
+#### Backend (박안도)
+- `Web/js/admin.js` — `loadMediaFiles()` 신규: Supabase Storage `ichthys_solache` 버킷 파일 목록 조회 (최신순, 최대 200개)
+- `Web/js/admin.js` — 각 파일 항목: 썸네일 + URL 복사 버튼 + 삭제 버튼 (confirm 다이얼로그 포함)
+- `Web/js/admin.js` — `initMediaPanel()`: 진입 시 자동 `loadMediaFiles()` 호출
+- `Web/js/admin.js` — `uploadMediaFiles()`: 업로드 완료 후 `loadMediaFiles()` 재호출 (목록 자동 갱신)
+
+---
 
 ### v0.1.0 - 팝업 UX 개선 (2026-06-06)
 
@@ -115,19 +128,12 @@
 ## 현재 진행 상황 (세션 인계용)
 
 ### 마지막 작업
-- 수행한 작업: 팝업 UX 개선 다수 (체크박스, 닫기 버튼, 이미지 세로형 수정, SyntaxError 수정)
-- 수정 파일: `Web/js/popup.js`, `Web/admin.html`, `Web/js/admin.js`
-- 커밋 여부: 완료 (master 브랜치, c54115d)
+- 수행한 작업: 미디어 탭을 전체 라이브러리로 강화 (파일 목록 조회 + 삭제)
+- 수정 파일: `Web/admin.html`, `Web/js/admin.js`
+- 커밋 여부: 완료 (master 브랜치, 038f8e4), 푸시 완료
 
 ### 진행 중 작업 (미완료)
-- [ ] **Supabase SQL 실행 필요** — `supabase-popup-setup.sql` (popups 테이블 생성)
-- [ ] **Supabase SQL 실행 필요** — 기존 계정 email 컬럼 동기화
-  ```sql
-  ALTER TABLE admin_profiles ADD COLUMN IF NOT EXISTS email text;
-  UPDATE admin_profiles ap SET email = au.email FROM auth.users au WHERE ap.id = au.id AND ap.email IS NULL;
-  ```
+- 없음
 
 ### 다음 세션 TODO
-1. **[P0]** Supabase SQL 2건 실행 확인 (popup 테이블 + email 동기화)
-2. **[P1]** Supabase Storage 이미지 업로드 기능 (관리자 페이지에서 직접 업로드, 공개 버킷)
-3. **[P2]** 이용약관 페이지 추가 (footer 링크)
+1. **[P2]** 이용약관 페이지 추가 (footer 링크)
