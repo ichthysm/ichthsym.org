@@ -45,7 +45,6 @@ function bindUploadBtn(btnId, fileInputId, urlInputId) {
   })
 }
 
-bindUploadBtn('btn-news-upload', 'news-file-input', 'news-input-image')
 bindUploadBtn('btn-popup-upload', 'popup-file-input', 'popup-input-image')
 
 // ── 유틸 ──────────────────────────────────────────
@@ -274,6 +273,83 @@ function setupDashboard() {
   loadNews()
 }
 
+// ── 뉴스 다중 이미지 ──────────────────────────────────
+
+function createImageRow(url = '') {
+  const row = document.createElement('div')
+  row.className = 'image-input-row'
+
+  const fileInput = document.createElement('input')
+  fileInput.type = 'file'
+  fileInput.accept = 'image/*'
+  fileInput.style.display = 'none'
+
+  const urlInput = document.createElement('input')
+  urlInput.type = 'url'
+  urlInput.className = 'news-image-url form-group input'
+  urlInput.style.cssText = 'width:100%;padding:10px 14px;border:1px solid #ddd;border-radius:6px;font-size:14px;font-family:inherit;outline:none;'
+  urlInput.placeholder = 'https://...'
+  urlInput.value = url
+
+  const uploadBtn = document.createElement('button')
+  uploadBtn.type = 'button'
+  uploadBtn.className = 'btn-upload'
+  uploadBtn.textContent = '파일 선택'
+
+  const removeBtn = document.createElement('button')
+  removeBtn.type = 'button'
+  removeBtn.className = 'btn-img-remove'
+  removeBtn.textContent = '−'
+
+  const inputWrap = document.createElement('div')
+  inputWrap.className = 'input-with-upload'
+  inputWrap.appendChild(urlInput)
+  inputWrap.appendChild(fileInput)
+  inputWrap.appendChild(uploadBtn)
+
+  row.appendChild(inputWrap)
+  row.appendChild(removeBtn)
+
+  uploadBtn.addEventListener('click', () => fileInput.click())
+  fileInput.addEventListener('change', async e => {
+    const file = e.target.files[0]
+    if (!file) return
+    uploadBtn.disabled = true
+    uploadBtn.textContent = '업로드 중...'
+    const ext = file.name.split('.').pop().toLowerCase()
+    const fileName = `${Date.now()}_${Math.random().toString(36).slice(2,8)}.${ext}`
+    const { error } = await supabase.storage.from('ichthys_solache').upload(fileName, file, { upsert: false })
+    uploadBtn.disabled = false
+    uploadBtn.textContent = '파일 선택'
+    if (error) { alert('업로드 실패: ' + error.message); return }
+    const { data: { publicUrl } } = supabase.storage.from('ichthys_solache').getPublicUrl(fileName)
+    urlInput.value = publicUrl
+    e.target.value = ''
+  })
+
+  removeBtn.addEventListener('click', () => {
+    row.remove()
+    syncRemoveBtns()
+  })
+
+  return row
+}
+
+function syncRemoveBtns() {
+  const list = document.getElementById('news-image-list')
+  if (!list) return
+  const rows = list.querySelectorAll('.image-input-row')
+  rows.forEach(r => {
+    r.querySelector('.btn-img-remove').style.display = rows.length > 1 ? 'inline-block' : 'none'
+  })
+}
+
+document.getElementById('btn-news-add-image').addEventListener('click', () => {
+  const list = document.getElementById('news-image-list')
+  list.appendChild(createImageRow())
+  syncRemoveBtns()
+})
+
 // ── 선교지 소식 CRUD ──────────────────────────────────
 
 async function loadNews() {
@@ -325,7 +401,17 @@ function openNewsModal(post = null) {
   document.getElementById('modal-news-title').textContent = post ? '소식 수정' : '소식 작성'
   document.getElementById('news-input-title').value = post?.title || ''
   document.getElementById('news-input-content').value = post?.content || ''
-  document.getElementById('news-input-image').value = post?.image_url || ''
+
+  const list = document.getElementById('news-image-list')
+  list.innerHTML = ''
+  let urls = []
+  if (post?.image_url) {
+    try { urls = JSON.parse(post.image_url) } catch { urls = [post.image_url] }
+  }
+  if (!urls.length) urls = ['']
+  urls.forEach(url => list.appendChild(createImageRow(url)))
+  syncRemoveBtns()
+
   document.getElementById('news-form-error').textContent = ''
   document.getElementById('modal-news').classList.add('open')
 }
@@ -338,7 +424,9 @@ document.getElementById('modal-news-cancel').addEventListener('click', () => {
 document.getElementById('modal-news-save').addEventListener('click', async () => {
   const title = document.getElementById('news-input-title').value.trim()
   const content = document.getElementById('news-input-content').value.trim()
-  const image_url = document.getElementById('news-input-image').value.trim() || null
+  const imageUrls = Array.from(document.querySelectorAll('#news-image-list .news-image-url'))
+    .map(i => i.value.trim()).filter(Boolean)
+  const image_url = imageUrls.length ? JSON.stringify(imageUrls) : null
   setError('news-form-error', '')
 
   if (!title || !content) { setError('news-form-error', '제목과 본문을 입력하세요.'); return }

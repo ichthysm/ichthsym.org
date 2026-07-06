@@ -376,6 +376,19 @@
     }
     .btn-copy-url:hover { background: #eef0e8; color: #4a5240; border-color: #4a5240; }
     .btn-copy-url.copied { background: #eef0e8; color: #4a5240; border-color: #4a5240; }
+    .image-input-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .image-input-row .input-with-upload { flex: 1; }
+    .btn-img-remove {
+      padding: 7px 10px; background: #fff; border: 1px solid #e8e4dc;
+      border-radius: 6px; color: #c0392b; cursor: pointer; font-size: 14px; flex-shrink: 0; line-height: 1;
+    }
+    .btn-img-remove:hover { background: #fdecea; border-color: #c0392b; }
+    .btn-img-add {
+      margin-top: 4px; padding: 6px 14px; background: none;
+      border: 1px dashed #ccc; border-radius: 6px; font-size: 12px;
+      font-family: inherit; color: #999; cursor: pointer; display: block;
+    }
+    .btn-img-add:hover { border-color: #4a5240; color: #4a5240; }
   </style>
 </head>
 <body>
@@ -533,11 +546,8 @@
     </div>
     <div class="form-group">
       <label>이미지 URL (선택)</label>
-      <div class="input-with-upload">
-        <input type="url" id="news-input-image" placeholder="https://..." />
-        <input type="file" id="news-file-input" accept="image/*" style="display:none;" />
-        <button type="button" class="btn-upload" id="btn-news-upload">파일 선택</button>
-      </div>
+      <div id="news-image-list"></div>
+      <button type="button" class="btn-img-add" id="btn-news-add-image">+ 이미지 추가</button>
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" id="modal-news-cancel">취소</button>
