@@ -709,53 +709,73 @@ function initMediaPanel() {
     const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'))
     if (files.length) uploadMediaFiles(files)
   })
+
+  loadMediaFiles()
 }
 
-async function uploadMediaFiles(files) {
+async function loadMediaFiles() {
   const grid = document.getElementById('media-grid')
+  grid.innerHTML = '<p class="loading-msg">불러오는 중...</p>'
 
-  const placeholders = files.map((file, i) => {
+  const { data, error } = await supabase.storage
+    .from('ichthys_solache')
+    .list('', { limit: 200, sortBy: { column: 'created_at', order: 'desc' } })
+
+  if (error) { grid.innerHTML = '<p class="loading-msg">불러오기 실패</p>'; return }
+
+  const files = (data || []).filter(f => f.name !== '.emptyFolderPlaceholder' && f.id)
+
+  if (!files.length) { grid.innerHTML = '<p class="empty-state">업로드된 파일이 없습니다.</p>'; return }
+
+  grid.innerHTML = ''
+  files.forEach(file => {
+    const { data: { publicUrl } } = supabase.storage.from('ichthys_solache').getPublicUrl(file.name)
+
     const item = document.createElement('div')
-    item.className = 'media-item uploading'
-    item.id = `media-upload-${i}-${Date.now()}`
-    item.innerHTML = `<div class="media-item-status">업로드 중...<br>${file.name}</div>`
-    grid.prepend(item)
-    return item
-  })
-
-  await Promise.all(files.map(async (file, i) => {
-    const ext = file.name.split('.').pop().toLowerCase()
-    const fileName = `${Date.now()}_${Math.random().toString(36).slice(2,8)}.${ext}`
-
-    const { error } = await supabase.storage
-      .from('ichthys_solache')
-      .upload(fileName, file, { upsert: false })
-
-    const item = placeholders[i]
-
-    if (error) {
-      item.classList.remove('uploading')
-      item.innerHTML = `<div class="media-item-status" style="color:#c0392b;">실패: ${file.name}</div>`
-      return
-    }
-
-    const { data: { publicUrl } } = supabase.storage.from('ichthys_solache').getPublicUrl(fileName)
-
-    item.classList.remove('uploading')
+    item.className = 'media-item'
     item.innerHTML = `
-      <img src="${publicUrl}" alt="${fileName}" />
+      <img src="${publicUrl}" alt="${file.name}" loading="lazy" />
       <div class="media-item-body">
-        <div class="media-item-url">${publicUrl}</div>
-        <button class="btn-copy-url">URL 복사</button>
+        <div class="media-item-url">${file.name}</div>
+        <div class="media-item-actions">
+          <button class="btn-copy-url" data-url="${publicUrl}">URL 복사</button>
+          <button class="btn-media-delete" data-name="${file.name}">삭제</button>
+        </div>
       </div>`
 
     item.querySelector('.btn-copy-url').addEventListener('click', function () {
-      navigator.clipboard.writeText(publicUrl)
+      navigator.clipboard.writeText(this.dataset.url)
       this.textContent = '복사됨!'
       this.classList.add('copied')
       setTimeout(() => { this.textContent = 'URL 복사'; this.classList.remove('copied') }, 1500)
     })
+
+    item.querySelector('.btn-media-delete').addEventListener('click', async function () {
+      if (!confirm(`'${file.name}' 파일을 삭제하시겠습니까?\n삭제된 파일은 복구할 수 없습니다.`)) return
+      const { error } = await supabase.storage.from('ichthys_solache').remove([file.name])
+      if (error) { alert('삭제 실패: ' + error.message); return }
+      loadMediaFiles()
+    })
+
+    grid.appendChild(item)
+  })
+}
+
+async function uploadMediaFiles(files) {
+  const grid = document.getElementById('media-grid')
+  grid.innerHTML = `<p class="loading-msg">업로드 중... (${files.length}개)</p>`
+
+  const results = await Promise.all(files.map(async file => {
+    const ext = file.name.split('.').pop().toLowerCase()
+    const fileName = `${Date.now()}_${Math.random().toString(36).slice(2,8)}.${ext}`
+    const { error } = await supabase.storage.from('ichthys_solache').upload(fileName, file, { upsert: false })
+    return error ? { ok: false, name: file.name } : { ok: true }
   }))
+
+  const failed = results.filter(r => !r.ok)
+  if (failed.length) alert(`${failed.length}개 업로드 실패: ${failed.map(r => r.name).join(', ')}`)
+
+  loadMediaFiles()
 }
 
 // ── 팝업 관리 ──────────────────────────────────────────
