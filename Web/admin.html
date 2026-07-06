@@ -334,6 +334,15 @@
     .form-datetime:focus { border-color: #4a5240; }
     .form-row { display: flex; gap: 12px; }
     .form-row .form-group { flex: 1; }
+    .input-with-upload { display: flex; gap: 8px; align-items: center; }
+    .input-with-upload input[type="url"] { flex: 1; }
+    .btn-upload {
+      padding: 8px 12px; background: #f4f3ef; border: 1px solid #ddd;
+      border-radius: 6px; font-size: 12px; font-family: inherit;
+      cursor: pointer; white-space: nowrap; color: #555; flex-shrink: 0;
+    }
+    .btn-upload:hover { background: #eef0e8; border-color: #4a5240; color: #4a5240; }
+    .btn-upload:disabled { opacity: 0.5; cursor: not-allowed; }
   </style>
 </head>
 <body>
@@ -475,7 +484,11 @@
     </div>
     <div class="form-group">
       <label>이미지 URL (선택)</label>
-      <input type="url" id="news-input-image" placeholder="https://..." />
+      <div class="input-with-upload">
+        <input type="url" id="news-input-image" placeholder="https://..." />
+        <input type="file" id="news-file-input" accept="image/*" style="display:none;" />
+        <button type="button" class="btn-upload" id="btn-news-upload">파일 선택</button>
+      </div>
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" id="modal-news-cancel">취소</button>
@@ -586,7 +599,11 @@
     </div>
     <div class="form-group" id="popup-image-group" style="display:none;">
       <label>이미지 URL</label>
-      <input type="url" id="popup-input-image" placeholder="https://..." />
+      <div class="input-with-upload">
+        <input type="url" id="popup-input-image" placeholder="https://..." />
+        <input type="file" id="popup-file-input" accept="image/*" style="display:none;" />
+        <button type="button" class="btn-upload" id="btn-popup-upload">파일 선택</button>
+      </div>
     </div>
     <div class="form-group">
       <label>링크 URL (선택)</label>

@@ -12,6 +12,42 @@ let editingNewsId = null
 let editingPrayerId = null
 let editingPopupId = null
 
+// ── 이미지 업로드 ──────────────────────────────────────
+async function uploadImage(file, urlInputId, btnId) {
+  const btn = document.getElementById(btnId)
+  btn.disabled = true
+  btn.textContent = '업로드 중...'
+
+  const ext = file.name.split('.').pop().toLowerCase()
+  const fileName = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`
+
+  const { error } = await supabase.storage
+    .from('media')
+    .upload(fileName, file, { upsert: false })
+
+  btn.disabled = false
+  btn.textContent = '파일 선택'
+
+  if (error) { alert('업로드 실패: ' + error.message); return }
+
+  const { data: { publicUrl } } = supabase.storage.from('media').getPublicUrl(fileName)
+  document.getElementById(urlInputId).value = publicUrl
+}
+
+function bindUploadBtn(btnId, fileInputId, urlInputId) {
+  document.getElementById(btnId).addEventListener('click', () => {
+    document.getElementById(fileInputId).click()
+  })
+  document.getElementById(fileInputId).addEventListener('change', e => {
+    const file = e.target.files[0]
+    if (file) uploadImage(file, urlInputId, btnId)
+    e.target.value = ''
+  })
+}
+
+bindUploadBtn('btn-news-upload', 'news-file-input', 'news-input-image')
+bindUploadBtn('btn-popup-upload', 'popup-file-input', 'popup-input-image')
+
 // ── 유틸 ──────────────────────────────────────────
 function formatDate(iso) {
   const d = new Date(iso)
