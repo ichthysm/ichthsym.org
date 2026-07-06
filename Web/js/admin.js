@@ -22,7 +22,7 @@ async function uploadImage(file, urlInputId, btnId) {
   const fileName = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`
 
   const { error } = await supabase.storage
-    .from('media')
+    .from('ichthys_solache')
     .upload(fileName, file, { upsert: false })
 
   btn.disabled = false
@@ -30,7 +30,7 @@ async function uploadImage(file, urlInputId, btnId) {
 
   if (error) { alert('업로드 실패: ' + error.message); return }
 
-  const { data: { publicUrl } } = supabase.storage.from('media').getPublicUrl(fileName)
+  const { data: { publicUrl } } = supabase.storage.from('ichthys_solache').getPublicUrl(fileName)
   document.getElementById(urlInputId).value = publicUrl
 }
 
