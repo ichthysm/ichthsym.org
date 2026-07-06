@@ -343,6 +343,39 @@
     }
     .btn-upload:hover { background: #eef0e8; border-color: #4a5240; color: #4a5240; }
     .btn-upload:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* 미디어 패널 */
+    .media-drop-zone {
+      border: 2px dashed #ddd; border-radius: 10px; padding: 40px 20px;
+      text-align: center; background: #faf8f5; margin-bottom: 24px;
+      transition: border-color 0.2s;
+    }
+    .media-drop-zone.dragover { border-color: #4a5240; background: #eef0e8; }
+    .media-drop-hint p { font-size: 13px; color: #aaa; margin-bottom: 12px; }
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+    }
+    .media-item {
+      background: #fff; border: 1px solid #e8e4dc; border-radius: 8px;
+      overflow: hidden; font-size: 12px;
+    }
+    .media-item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
+    .media-item-body { padding: 8px 10px; }
+    .media-item-url {
+      color: #aaa; word-break: break-all; line-height: 1.4;
+      max-height: 48px; overflow: hidden; margin-bottom: 6px;
+    }
+    .media-item.uploading { opacity: 0.5; }
+    .media-item.uploading img { display: none; }
+    .media-item-status { padding: 14px 10px; color: #888; font-size: 12px; }
+    .btn-copy-url {
+      width: 100%; padding: 5px 0; background: #f4f3ef; border: 1px solid #ddd;
+      border-radius: 4px; font-size: 12px; font-family: inherit; cursor: pointer; color: #555;
+    }
+    .btn-copy-url:hover { background: #eef0e8; color: #4a5240; border-color: #4a5240; }
+    .btn-copy-url.copied { background: #eef0e8; color: #4a5240; border-color: #4a5240; }
   </style>
 </head>
 <body>
@@ -418,6 +451,7 @@
         <button class="sidebar-btn active" data-panel="news">선교지 소식</button>
         <button class="sidebar-btn" data-panel="prayer">정기 기도 모임</button>
         <button class="sidebar-btn" data-panel="popup">팝업 관리</button>
+        <button class="sidebar-btn" data-panel="media">미디어</button>
       </div>
       <hr class="sidebar-divider" />
       <div class="sidebar-section" id="sidebar-admin-section" style="display:none;">
@@ -455,6 +489,21 @@
           <button class="btn-add" id="btn-add-popup">+ 팝업 추가</button>
         </div>
         <div id="popup-table-wrap"><p class="loading-msg">불러오는 중...</p></div>
+      </div>
+
+      <!-- 미디어 -->
+      <div class="admin-panel" id="panel-media">
+        <div class="panel-header">
+          <h2>미디어</h2>
+        </div>
+        <div class="media-drop-zone" id="media-drop-zone">
+          <input type="file" id="media-file-input" accept="image/*" multiple style="display:none;" />
+          <div class="media-drop-hint">
+            <p>이미지를 드래그하거나</p>
+            <button class="btn-add" id="btn-media-select">파일 선택 (여러 장 가능)</button>
+          </div>
+        </div>
+        <div class="media-grid" id="media-grid"></div>
       </div>
 
       <!-- 관리자 관리 -->

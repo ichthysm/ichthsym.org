@@ -266,6 +266,7 @@ function setupDashboard() {
       if (btn.dataset.panel === 'news') loadNews()
       if (btn.dataset.panel === 'prayer') loadPrayer()
       if (btn.dataset.panel === 'popup') loadPopups()
+      if (btn.dataset.panel === 'media') initMediaPanel()
       if (btn.dataset.panel === 'admins') loadAdmins()
     })
   })
@@ -594,6 +595,80 @@ document.getElementById('modal-password-save').addEventListener('click', async (
   document.getElementById('pw-form-success').textContent = '비밀번호가 변경되었습니다.'
   setTimeout(() => document.getElementById('modal-password').classList.remove('open'), 1500)
 })
+
+// ── 미디어 패널 ──────────────────────────────────────────
+
+function initMediaPanel() {
+  const dropZone = document.getElementById('media-drop-zone')
+  const fileInput = document.getElementById('media-file-input')
+
+  if (dropZone.dataset.initialized) return
+  dropZone.dataset.initialized = '1'
+
+  document.getElementById('btn-media-select').addEventListener('click', () => fileInput.click())
+
+  fileInput.addEventListener('change', e => {
+    const files = Array.from(e.target.files)
+    if (files.length) uploadMediaFiles(files)
+    e.target.value = ''
+  })
+
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover') })
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'))
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault()
+    dropZone.classList.remove('dragover')
+    const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'))
+    if (files.length) uploadMediaFiles(files)
+  })
+}
+
+async function uploadMediaFiles(files) {
+  const grid = document.getElementById('media-grid')
+
+  const placeholders = files.map((file, i) => {
+    const item = document.createElement('div')
+    item.className = 'media-item uploading'
+    item.id = `media-upload-${i}-${Date.now()}`
+    item.innerHTML = `<div class="media-item-status">업로드 중...<br>${file.name}</div>`
+    grid.prepend(item)
+    return item
+  })
+
+  await Promise.all(files.map(async (file, i) => {
+    const ext = file.name.split('.').pop().toLowerCase()
+    const fileName = `${Date.now()}_${Math.random().toString(36).slice(2,8)}.${ext}`
+
+    const { error } = await supabase.storage
+      .from('ichthys_solache')
+      .upload(fileName, file, { upsert: false })
+
+    const item = placeholders[i]
+
+    if (error) {
+      item.classList.remove('uploading')
+      item.innerHTML = `<div class="media-item-status" style="color:#c0392b;">실패: ${file.name}</div>`
+      return
+    }
+
+    const { data: { publicUrl } } = supabase.storage.from('ichthys_solache').getPublicUrl(fileName)
+
+    item.classList.remove('uploading')
+    item.innerHTML = `
+      <img src="${publicUrl}" alt="${fileName}" />
+      <div class="media-item-body">
+        <div class="media-item-url">${publicUrl}</div>
+        <button class="btn-copy-url">URL 복사</button>
+      </div>`
+
+    item.querySelector('.btn-copy-url').addEventListener('click', function () {
+      navigator.clipboard.writeText(publicUrl)
+      this.textContent = '복사됨!'
+      this.classList.add('copied')
+      setTimeout(() => { this.textContent = 'URL 복사'; this.classList.remove('copied') }, 1500)
+    })
+  }))
+}
 
 // ── 팝업 관리 ──────────────────────────────────────────
 
