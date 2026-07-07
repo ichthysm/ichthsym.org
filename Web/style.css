@@ -331,17 +331,14 @@ ul.mlist li::before {
 }
 .board-card-imgs {
   display: flex;
+  flex-wrap: wrap;
   gap: 2px;
-  overflow-x: auto;
-  scrollbar-width: none;
 }
-.board-card-imgs::-webkit-scrollbar { display: none; }
 .board-card-imgs img {
-  height: 220px;
-  width: auto;
-  min-width: 160px;
+  flex: 1 1 calc(50% - 1px);
+  max-width: calc(50% - 1px);
+  height: 180px;
   object-fit: cover;
-  flex-shrink: 0;
   display: block;
 }
 .board-card-body {
