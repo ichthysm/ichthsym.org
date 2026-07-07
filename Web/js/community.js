@@ -22,10 +22,15 @@ async function loadNews() {
     return
   }
 
-  container.innerHTML = data.map((post, i) => `
+  container.innerHTML = data.map((post, i) => {
+    let firstImg = null
+    if (post.image_url) {
+      try { firstImg = JSON.parse(post.image_url)[0] } catch { firstImg = post.image_url }
+    }
+    return `
     <div class="board-card">
-      ${post.image_url
-        ? `<div class="board-card-img" style="background-image:url('${post.image_url}')"></div>`
+      ${firstImg
+        ? `<div class="board-card-img" style="background-image:url('${firstImg}')"></div>`
         : ''}
       <div class="board-card-body">
         <p class="board-date">${formatDate(post.created_at)}</p>
@@ -34,7 +39,8 @@ async function loadNews() {
         <button class="board-more-btn" data-target="${i}">더보기 ▾</button>
       </div>
     </div>
-  `).join('')
+  `
+  }).join('')
 
   container.querySelectorAll('.board-more-btn').forEach(btn => {
     btn.addEventListener('click', () => {
