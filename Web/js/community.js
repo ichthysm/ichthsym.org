@@ -1,4 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { marked } from 'https://esm.sh/marked@12'
 
 const supabase = createClient(
   'https://hsozcqbisfcswfvjepqv.supabase.co',
@@ -23,19 +24,21 @@ async function loadNews() {
   }
 
   container.innerHTML = data.map((post, i) => {
-    let firstImg = null
+    let imgs = []
     if (post.image_url) {
-      try { firstImg = JSON.parse(post.image_url)[0] } catch { firstImg = post.image_url }
+      try { imgs = JSON.parse(post.image_url) } catch { imgs = [post.image_url] }
+      if (!Array.isArray(imgs)) imgs = [imgs]
     }
+    const imgStrip = imgs.length
+      ? `<div class="board-card-imgs">${imgs.map(u => `<img src="${u}" alt="" loading="lazy" />`).join('')}</div>`
+      : ''
     return `
     <div class="board-card">
-      ${firstImg
-        ? `<div class="board-card-img" style="background-image:url('${firstImg}')"></div>`
-        : ''}
+      ${imgStrip}
       <div class="board-card-body">
         <p class="board-date">${formatDate(post.created_at)}</p>
         <h3>${post.title}</h3>
-        <p class="board-card-content" data-id="${i}">${post.content}</p>
+        <div class="board-card-content" data-id="${i}">${marked.parse(post.content || '')}</div>
         <button class="board-more-btn" data-target="${i}">더보기 ▾</button>
       </div>
     </div>
