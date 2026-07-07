@@ -379,6 +379,17 @@ ul.mlist li::before {
 .board-more-btn:hover { color: #4a5240; }
 .board-date { font-size: 11px; letter-spacing: 1px; color: #bbb; margin-bottom: 10px; }
 
+.prayer-info {
+  display: flex;
+  gap: 24px;
+  padding: 14px 20px;
+  background: #f5f3ee;
+  border-radius: 6px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  color: #4a5240;
+  font-weight: 500;
+}
 .prayer-list { display: flex; flex-direction: column; gap: 0; }
 .prayer-item {
   padding: 28px 0;
